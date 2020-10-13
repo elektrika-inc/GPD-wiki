@@ -1,2 +1,4 @@
 # GPD-wiki
-Wiki for documentation of GPD program
+
+Please see [the wiki](https://github.com/elektrika-inc/GPD-wiki/wiki) for GPD documentation
+
