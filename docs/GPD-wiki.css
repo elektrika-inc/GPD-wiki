@@ -368,10 +368,10 @@ kbd {
 }
 
 /* Pandoc template stuff */
-h1.title,
-p.subtitle {
+h1.title {
   text-align: left;
-  font-size: 2em;
+  font-size: 2.1em;
+  font-weight: 400;
 }
 
 div.line-block {
@@ -379,18 +379,9 @@ div.line-block {
 }
 
 /* pandoc-fmpp-wiki stuff */
-h1.toc-title {
-  font-size: 1.3em;
-  margin-bottom: 0.4em;
-}
-
-h1.toc-title,
-h1.title {
-  border-bottom: none;
-}
 
 .pfwiki-wrapper {
-  max-width: 1000px;
+  max-width: 1080px;
   margin: 0 auto;
   display: flex;
   flex-flow: row nowrap;
@@ -406,7 +397,8 @@ h1.title {
   flex: 0 auto;
   margin-top: 55px;
   padding: 6px 15px 15px 15px;
-  border: 1px solid #DEDEDE;
+  border: 2px solid #DEDEDE;
+  background-color: #fafafa;
   border-radius: 6px;
   max-width: 200px;
   order: 2;
@@ -431,9 +423,16 @@ h1.title {
 }
 
 .pfwiki-footer {
-  padding: 6px 0px;
+  padding: 3px 6px;
   margin: 0 30px;
-  border-top: 1px solid #AEAEAE;
+  border: 1px solid #AEAEAE;
+  border-radius: 5px;
+  background-color: #efefef;
+}
+
+.pfwiki-footer p {
+  margin: 0;
+  font-size: 0.92rem;
 }
 
 .markdown-body header {
