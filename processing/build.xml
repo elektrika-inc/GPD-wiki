@@ -64,6 +64,14 @@
           <arg line="-M title=GPD"/>
         </args>
       </pfwiki-build-html>
+      <fix-links replaceExt="html" replaceBare="true" stripComments="false" encoding="UTF-8" verbose="true">
+        <fileset dir="${target-html-dir}">
+          <include name="**/*.html"/>
+          <modified update="true" seldirs="false" cache="propertyfile" comparator="equal">
+            <param name="cache.cachefile" value="${target-html-dir}/fix-links-cache.properties"/>
+          </modified>
+        </fileset>
+      </fix-links>
     </target>
     
     <target name="clean" description="Clean output directories">
