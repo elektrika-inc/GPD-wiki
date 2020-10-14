@@ -57,6 +57,11 @@
       <delete unless:set="partials.uptodate">
         <fileset dir="${target-html-dir}" includes="*.html"/>
       </delete>
+      <copy todir="${target-html-dir}">
+        <fileset dir="${resourcedir}">
+          <patternset refid="pfwiki.html.resources"/>
+        </fileset>
+      </copy>
       <outofdate verbose="false" outputsources="md.sources" separator=",">
         <sourcefiles>
           <fileset dir="${merged-srcdir}" includes="*.md" excludes="_*.md"/>
