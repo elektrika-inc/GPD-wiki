@@ -368,10 +368,10 @@ kbd {
 }
 
 /* Pandoc template stuff */
-h1.title,
-p.subtitle {
+h1.title {
   text-align: left;
-  font-size: 2em;
+  font-size: 2.1em;
+  font-weight: 400;
 }
 
 div.line-block {
@@ -379,15 +379,6 @@ div.line-block {
 }
 
 /* pandoc-fmpp-wiki stuff */
-h1.toc-title {
-  font-size: 1.3em;
-  margin-bottom: 0.4em;
-}
-
-h1.toc-title,
-h1.title {
-  border-bottom: none;
-}
 
 .pfwiki-wrapper {
   max-width: 1000px;
