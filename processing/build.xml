@@ -57,6 +57,26 @@
       <property name="force.rebuild" value="true" unless:set="partials.uptodate"/>
       <property name="force.rebuild" value="false" if:set="partials.uptodate"/>
       
+      <outofdate force="${force.rebuild}" verbose="true" outputsources="md.sources" separator=",">
+        <sourcefiles>
+          <fileset dir="${merged-srcdir}" includes="*.md" excludes="_*.md"/>
+        </sourcefiles>
+        <mapper type="glob" dir="${merged-srcdir}" from="*.md" to="${target-html-dir}/*.html"/>
+        <sequential>
+          <!-- <echo message="${md.sources}"/> -->
+          <for list="${md.sources}" param="sourcefile" delimiter="," trim="true">
+            <sequential>
+              <var name="basename" unset="true"/>
+              <basename file="@{sourcefile}" property="basename" suffix=".md"/>
+              <propertyregex property="doctitle" override="true" input="${basename}"
+                             regexp="-" replace=" " global="true" defaultValue="${basename}"/>
+              <echo message="${basename} -> ${doctitle}"/>
+            </sequential>
+          </for>
+        </sequential>
+      </outofdate>
+
+      <!--
       <pfwiki-build-html srcdir="${merged-srcdir}" targetdir="${target-html-dir}" resourcedir="${resourcedir}"
                          index-file="Home" input-format="gfm" verbose="true" force="${force.rebuild}"
                          pandoc="${pandoc}" template-path="${merged-srcdir}/GPD-wiki.template">
@@ -64,6 +84,8 @@
           <arg line="-M title=GPD"/>
         </args>
       </pfwiki-build-html>
+      -->
+      
       <fix-links replaceExt="html" replaceBare="true" stripComments="false" encoding="UTF-8" verbose="true">
         <fileset dir="${target-html-dir}">
           <include name="**/*.html"/>
