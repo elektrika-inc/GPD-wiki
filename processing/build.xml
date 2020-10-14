@@ -10,16 +10,13 @@
     
     <property name="resourcedir" location="resources"/>
     <property name="merged-srcdir" location="merged-src"/>
-    <property name="intermediate-md-dir" location="target-md"/>
     <property name="target-html-dir" location="target-html"/>
 
     <!-- Use absolute locations for Pandoc paths -->
     <property name="pandoc" location="${pandoc.exe}"/>
-    <property name="template.path" location="${pandoc.template}"/>
 
     <target name="init">
       <mkdir dir="${merged-srcdir}"/>
-      <mkdir dir="${intermediate-md-dir}"/>
       <mkdir dir="${target-html-dir}"/>
     </target>
     
@@ -41,7 +38,12 @@
     </target>
 
     <target name="build-partials" depends="copy-src" description="Convert sidebar and footer into HTML">
-      <apply executable="${pandoc}" dest="${merged-srcdir}" verbose="true" parallel="false">
+      <uptodate property="partials.uptodate">
+        <srcfiles dir="${merged-srcdir}" includes="_Sidebar.md, _Footer.md" />
+        <mapper type="glob" from="*.md" to="*.html"/>
+      </uptodate>
+      <echo message="Partials changed -- rebuilding HTML" unless:set="partials.uptodate"/>
+      <apply executable="${pandoc}" dest="${merged-srcdir}" verbose="true" parallel="false" unless:set="partials.uptodate">
         <fileset dir="${merged-srcdir}" includes="_Sidebar.md, _Footer.md" />
         <mapper type="glob" from="*.md" to="*.html"/>
         <arg line="-f gfm -t html"/>
@@ -51,16 +53,21 @@
       </apply>
     </target>
     
-    <target name="build-html" depends="build-partials"
-            description="Build the final HTML from intermediate Markdown">
-      <pfwiki-build-html srcdir="${intermediate-md-dir}" targetdir="${target-html-dir}" resourcedir="${resourcedir}" 
-                         pandoc="${pandoc}" template-path="${template-path}" verbose="true">
+    <target name="build-html" depends="build-partials" description="Run Pandoc to build HTML">
+      <property name="force.rebuild" value="true" unless:set="partials.uptodate"/>
+      <property name="force.rebuild" value="false" if:set="partials.uptodate"/>
+      
+      <pfwiki-build-html srcdir="${merged-srcdir}" targetdir="${target-html-dir}" resourcedir="${resourcedir}"
+                         index-file="Home" input-format="gfm" verbose="true" force="${force.rebuild}"
+                         pandoc="${pandoc}" template-path="${merged-srcdir}/GPD-wiki.template">
+        <args>
+          <arg line="-M title=GPD"/>
+        </args>
       </pfwiki-build-html>
     </target>
     
     <target name="clean" description="Clean output directories">
       <delete dir="${merged-srcdir}"/>
-      <delete dir="${intermediate-md-dir}"/>
       <delete dir="${target-html-dir}"/>
     </target>
   
