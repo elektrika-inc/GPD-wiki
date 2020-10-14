@@ -1,0 +1,69 @@
+<project name="GPD-wiki" default="build-html" xmlns:if="ant:if" xmlns:unless="ant:unless">
+    <description>Process GPD wiki from sources to HTML</description>
+    
+    <!-- Expose environment variables with an ".env" prefix. -->
+    <property environment="env"/>
+
+    <property file="build.properties"/>
+
+    <include file="${pfwiki.dir}/pfwiki.xml"/>
+    
+    <property name="resourcedir" location="resources"/>
+    <property name="merged-srcdir" location="merged-src"/>
+    <property name="intermediate-md-dir" location="target-md"/>
+    <property name="target-html-dir" location="target-html"/>
+
+    <!-- Use absolute locations for Pandoc paths -->
+    <property name="pandoc" location="${pandoc.exe}"/>
+    <property name="template.path" location="${pandoc.template}"/>
+
+    <target name="init">
+      <mkdir dir="${merged-srcdir}"/>
+      <mkdir dir="${intermediate-md-dir}"/>
+      <mkdir dir="${target-html-dir}"/>
+    </target>
+    
+    <target name="copy-src" depends="init" description="Copy resources and external sources to our merged-srcdir">
+      <!-- Copy external sources -->
+      <copy todir="${merged-srcdir}" verbose="true">
+        <fileset dir="${external-src.dir}" includes="*.md"/>
+      </copy>
+      <copy todir="${target-html-dir}" verbose="true">
+        <fileset dir="${external-src.dir}">
+          <patternset refid="pfwiki.html.resources"/>
+        </fileset>
+      </copy>
+      
+      <!-- Copy resource includes -->
+      <copy todir="${merged-srcdir}">
+        <fileset dir="${resourcedir}" includes="**/*.md, **/*.ftl, GPD-wiki.template"/>
+      </copy>
+    </target>
+
+    <target name="build-partials" depends="copy-src" description="Convert sidebar and footer into HTML">
+      <apply executable="${pandoc}" dest="${merged-srcdir}" verbose="true" parallel="false">
+        <fileset dir="${merged-srcdir}" includes="_Sidebar.md, _Footer.md" />
+        <mapper type="glob" from="*.md" to="*.html"/>
+        <arg line="-f gfm -t html"/>
+        <arg value="-o"/>
+	<targetfile/>
+	<srcfile/>
+      </apply>
+    </target>
+    
+    <target name="build-html" depends="build-partials"
+            description="Build the final HTML from intermediate Markdown">
+      <pfwiki-build-html srcdir="${intermediate-md-dir}" targetdir="${target-html-dir}" resourcedir="${resourcedir}" 
+                         pandoc="${pandoc}" template-path="${template-path}" verbose="true">
+      </pfwiki-build-html>
+    </target>
+    
+    <target name="clean" description="Clean output directories">
+      <delete dir="${merged-srcdir}"/>
+      <delete dir="${intermediate-md-dir}"/>
+      <delete dir="${target-html-dir}"/>
+    </target>
+  
+</project>
+
+<!-- :indentSize=2:noTabs=true: -->
