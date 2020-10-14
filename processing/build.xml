@@ -114,6 +114,14 @@
       <copy file="${target-html-dir}/Home.html" tofile="${target-html-dir}/index.html"/>
     </target>
     
+    <target name="deploy" depends="build-html" description="Copy generated HTML to deployment directory">
+      <copy todir="${deploy.dir}">
+        <fileset dir="${target-html-dir}">
+          <patternset refid="pfwiki.html.resources"/>
+        </fileset>
+      </copy>
+    </target>
+    
     <target name="clean" description="Clean output directories">
       <delete dir="${merged-srcdir}"/>
       <delete dir="${target-html-dir}"/>
