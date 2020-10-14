@@ -370,7 +370,8 @@ kbd {
 /* Pandoc template stuff */
 h1.title,
 p.subtitle {
-  text-align: center;
+  text-align: left;
+  font-size: 2em;
 }
 
 div.line-block {
@@ -408,6 +409,7 @@ h1.title {
   border: 1px solid #DEDEDE;
   border-radius: 6px;
   max-width: 200px;
+  order: 2;
 }
 
 .pfwiki-sidebar li {

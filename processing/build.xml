@@ -54,10 +54,10 @@
     </target>
     
     <target name="build-html" depends="build-partials" description="Run Pandoc to build HTML">
-      <property name="force.rebuild" value="true" unless:set="partials.uptodate"/>
-      <property name="force.rebuild" value="false" if:set="partials.uptodate"/>
-      
-      <outofdate force="${force.rebuild}" verbose="true" outputsources="md.sources" separator=",">
+      <delete unless:set="partials.uptodate">
+        <fileset dir="${target-html-dir}" includes="*.html"/>
+      </delete>
+      <outofdate verbose="false" outputsources="md.sources" separator=",">
         <sourcefiles>
           <fileset dir="${merged-srcdir}" includes="*.md" excludes="_*.md"/>
         </sourcefiles>
@@ -70,21 +70,20 @@
               <basename file="@{sourcefile}" property="basename" suffix=".md"/>
               <propertyregex property="doctitle" override="true" input="${basename}"
                              regexp="-" replace=" " global="true" defaultValue="${basename}"/>
-              <echo message="${basename} -> ${doctitle}"/>
+              <var name="outputfile" value="${target-html-dir}/${basename}.html"/>
+              <echo>Pandoc ${basename}.md -> ${basename}.html</echo>
+              <exec executable="${pandoc}">
+                <arg line="-f gfm -t html -s"/>
+                <arg value="--template=${merged-srcdir}/GPD-wiki.template"/>
+                <arg value="--metadata=title:${doctitle}"/>
+                <arg value="-o"/>
+                <arg value="${outputfile}"/>
+                <arg value="@{sourcefile}"/>
+              </exec>
             </sequential>
           </for>
         </sequential>
       </outofdate>
-
-      <!--
-      <pfwiki-build-html srcdir="${merged-srcdir}" targetdir="${target-html-dir}" resourcedir="${resourcedir}"
-                         index-file="Home" input-format="gfm" verbose="true" force="${force.rebuild}"
-                         pandoc="${pandoc}" template-path="${merged-srcdir}/GPD-wiki.template">
-        <args>
-          <arg line="-M title=GPD"/>
-        </args>
-      </pfwiki-build-html>
-      -->
       
       <fix-links replaceExt="html" replaceBare="true" stripComments="false" encoding="UTF-8" verbose="true">
         <fileset dir="${target-html-dir}">
