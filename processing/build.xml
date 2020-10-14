@@ -21,28 +21,33 @@
     </target>
     
     <target name="copy-src" depends="init" description="Copy resources and external sources to our merged-srcdir">
-      <!-- Copy external sources -->
-      <copy todir="${merged-srcdir}" verbose="true">
+      <!-- Copy external Markdown sources -->
+      <copy todir="${merged-srcdir}">
         <fileset dir="${external-src.dir}" includes="*.md"/>
       </copy>
-      <copy todir="${target-html-dir}" verbose="true">
+      
+      <!-- Copy external HTML resources -->
+      <copy todir="${target-html-dir}">
         <fileset dir="${external-src.dir}">
           <patternset refid="pfwiki.html.resources"/>
         </fileset>
       </copy>
       
-      <!-- Copy resource includes -->
+      <!-- Copy resource Markdown, includes, and template -->
       <copy todir="${merged-srcdir}">
         <fileset dir="${resourcedir}" includes="**/*.md, **/*.ftl, ${pandoc.template}"/>
       </copy>
     </target>
 
     <target name="build-partials" depends="copy-src" description="Convert sidebar and footer into HTML">
+      <!-- Check if our sidebar and footer need to be rebuilt -->
       <uptodate property="partials.uptodate">
         <srcfiles dir="${merged-srcdir}" includes="_Sidebar.md, _Footer.md" />
         <mapper type="glob" from="*.md" to="*.html"/>
       </uptodate>
       <echo message="Partials changed -- rebuilding HTML" unless:set="partials.uptodate"/>
+      
+      <!-- And if so, Pandoc them in fragment mode -->
       <apply executable="${pandoc}" dest="${merged-srcdir}" verbose="true" parallel="false" unless:set="partials.uptodate">
         <fileset dir="${merged-srcdir}" includes="_Sidebar.md, _Footer.md" />
         <mapper type="glob" from="*.md" to="*.html"/>
@@ -54,21 +59,25 @@
     </target>
     
     <target name="build-html" depends="build-partials" description="Run Pandoc to build HTML">
+      <!-- If we need to rebuild everything, do it by clearing the output HTML files. -->
       <delete unless:set="partials.uptodate">
         <fileset dir="${target-html-dir}" includes="*.html"/>
       </delete>
+      
+      <!-- Pull in pre-defined resources of the HTML variety. -->
       <copy todir="${target-html-dir}">
         <fileset dir="${resourcedir}">
           <patternset refid="pfwiki.html.resources"/>
         </fileset>
       </copy>
+      
+      <!-- Run Pandoc on all out-of-date Markdown files. -->
       <outofdate verbose="false" outputsources="md.sources" separator=",">
         <sourcefiles>
           <fileset dir="${merged-srcdir}" includes="*.md" excludes="_*.md"/>
         </sourcefiles>
         <mapper type="glob" dir="${merged-srcdir}" from="*.md" to="${target-html-dir}/*.html"/>
         <sequential>
-          <!-- <echo message="${md.sources}"/> -->
           <for list="${md.sources}" param="sourcefile" delimiter="," trim="true">
             <sequential>
               <var name="basename" unset="true"/>
@@ -91,6 +100,7 @@
         </sequential>
       </outofdate>
       
+      <!-- Rewrite links for all changed HTML files -->
       <fix-links replaceExt="html" replaceBare="true" stripComments="false" encoding="UTF-8" verbose="true">
         <fileset dir="${target-html-dir}">
           <include name="**/*.html"/>
@@ -99,6 +109,9 @@
           </modified>
         </fileset>
       </fix-links>
+      
+      <!-- Create an index file -->
+      <copy file="${target-html-dir}/Home.html" tofile="${target-html-dir}/index.html"/>
     </target>
     
     <target name="clean" description="Clean output directories">
