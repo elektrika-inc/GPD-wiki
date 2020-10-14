@@ -1,0 +1,52 @@
+$-- :mode=html:indentSize=2:noTabs=true:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pfwiki" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>$pagetitle$</title>
+  <style type="text/css">
+$-- ===================================== default Pandoc partial styles.html()
+    code{white-space: pre;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+$if(quotes)$
+    q { quotes: "“" "”" "‘" "’"; }
+$endif$
+$-- =============================================================== styles.html()
+  </style>
+  <link rel="stylesheet" href="GPD-wiki.css">
+  <link rel="stylesheet" href="pygments-highlight.css">
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+  <div class="pfwiki-wrapper">
+    <div id="pfwiki-sidebar-anchor" class="pfwiki-sidebar">
+      <div class="small-screen-jump-links">
+        <a href="#pfwiki-body-anchor">Jump to Top</a>
+      </div>
+      ${ _Sidebar.html() }
+    </div>
+    <div id="pfwiki-body-anchor" class="pfwiki-body-wrapper">
+      <article class="markdown-body">
+        <header>
+          <div class="small-screen-jump-links">
+            <a href="#pfwiki-sidebar-anchor">Jump to Sidebar</a>
+          </div>
+          <h1 class="title">$title$</h1>
+        </header>
+        $body$
+      </article>
+      <div class="pfwiki-footer">
+        ${ _Footer.html() }
+      </div>
+    </div> $-- body-wrapper
+  </div>  $--  wrapper
+</body>
+</html>
