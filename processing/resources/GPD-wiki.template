@@ -41,7 +41,7 @@ $-- =============================================================== styles.html(
           </div>
           <h1 class="title">$title$</h1>
         </header>
-        $body$
+$body$
       </article>
       <div class="pfwiki-footer">
         ${ _Footer.html() }
