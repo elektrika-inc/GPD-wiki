@@ -19,7 +19,7 @@ $if(quotes)$
 $endif$
 $-- =============================================================== styles.html()
   </style>
-  <link rel="stylesheet" href="GPD-wiki.css">
+  <link rel="stylesheet" href="$cssfile$">
   <link rel="stylesheet" href="pygments-highlight.css">
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
@@ -31,6 +31,7 @@ $-- =============================================================== styles.html(
       <div class="small-screen-jump-links">
         <a href="#pfwiki-body-anchor">Jump to Top</a>
       </div>
+      <h1>GPD Wiki Pages</h1>
       ${ _Sidebar.html() }
     </div>
     <div id="pfwiki-body-anchor" class="pfwiki-body-wrapper">

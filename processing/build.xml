@@ -33,7 +33,7 @@
       
       <!-- Copy resource includes -->
       <copy todir="${merged-srcdir}">
-        <fileset dir="${resourcedir}" includes="**/*.md, **/*.ftl, GPD-wiki.template"/>
+        <fileset dir="${resourcedir}" includes="**/*.md, **/*.ftl, ${pandoc.template}"/>
       </copy>
     </target>
 
@@ -79,7 +79,8 @@
               <echo>Pandoc ${basename}.md -> ${basename}.html</echo>
               <exec executable="${pandoc}">
                 <arg line="-f gfm -t html -s"/>
-                <arg value="--template=${merged-srcdir}/GPD-wiki.template"/>
+                <arg value="--template=${merged-srcdir}/${pandoc.template}"/>
+                <arg value="--variable=cssfile:${css.file}"/>
                 <arg value="--metadata=title:${doctitle}"/>
                 <arg value="-o"/>
                 <arg value="${outputfile}"/>
