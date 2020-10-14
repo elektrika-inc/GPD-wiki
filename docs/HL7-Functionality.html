@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en"> 
+ <head> 
+  <meta charset="utf-8"> 
+  <meta name="generator" content="pfwiki"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"> 
+  <title>HL7 Functionality</title> 
+  <style type="text/css">
+    code{white-space: pre;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style> 
+  <link rel="stylesheet" href="GPD-wiki.css"> 
+  <link rel="stylesheet" href="pygments-highlight.css"> <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]--> 
+ </head> 
+ <body> 
+  <div class="pfwiki-wrapper"> 
+   <div id="pfwiki-sidebar-anchor" class="pfwiki-sidebar"> 
+    <div class="small-screen-jump-links"> <a href="#pfwiki-body-anchor">Jump to Top</a> 
+    </div> 
+    <h1>GPD Wiki Pages</h1> 
+    <ul> 
+     <li><a href="Home.html">Introduction (Home)</a></li> 
+     <li><a href="List-of-Guides.html">List of Guides</a></li> 
+     <li><a href="Getting-Started.html">Getting Started</a></li> 
+     <li><a href="Configuration-and-Deployment.html">Configuration and Deployment</a></li> 
+     <li><a href="Database-Fields.html">Database Fields</a></li> 
+     <li><a href="Patient-and-Treatment-Templates.html">Patient and Treatment Templates</a></li> 
+     <li><a href="Analysis.html">Analysis</a></li> 
+     <li><a href="Customizing-PDF-Treatment-Reports.html">Customizing PDF Treatment Reports</a></li> 
+     <li><a href="HL7-Functionality.html">HL7 Functionality</a></li> 
+     <li><a href="Markers.html">Markers</a></li> 
+     <li><a href="Finalizing-Treatments.html">Finalizing Treatments</a></li> 
+     <li><a href="Patient-Summary-Reports.html">Patient Summary Reports</a></li> 
+     <li><a href="Preferences.html">Preferences</a></li> 
+     <li><a href="Keyboard-Shortcuts.html">Keyboard Shortcuts</a></li> 
+     <li><a href="Additional-Thanks.html">Additional Thanks</a></li> 
+    </ul> 
+   </div> 
+   <div id="pfwiki-body-anchor" class="pfwiki-body-wrapper"> 
+    <article class="markdown-body"> 
+     <header> 
+      <div class="small-screen-jump-links"> <a href="#pfwiki-sidebar-anchor">Jump to Sidebar</a> 
+      </div> 
+      <h1 class="title">HL7 Functionality</h1> 
+     </header> <!-- HL7 Functionality --> 
+     <h3 id="on-this-page">On this Page</h3> 
+     <ul> 
+      <li><a href="#overview">Overview</a></li> 
+      <li><a href="#preferences">Preferences</a></li> 
+      <li><a href="#templates">Templates</a> 
+       <ul> 
+        <li><a href="#patient-query-template">Patient Query Template</a></li> 
+        <li><a href="#patient-info-template">Patient Info Template</a></li> 
+        <li><a href="#treatment-message-template">Treatment Message Template</a> 
+         <ul> 
+          <li><a href="#passthrough-segments-and-response-field-variables">Passthrough Segments and Response Field Variables</a></li> 
+         </ul></li> 
+        <li><a href="#setting-network-preferences-in-templates">Setting Network Preferences in Templates</a></li> 
+       </ul></li> 
+      <li><a href="#network-transport-and-file-format">Network Transport and File Format</a> 
+       <ul> 
+        <li><a href="#patient-query-mllp-over-tcpip">Patient Query (MLLP over TCP/IP)</a></li> 
+        <li><a href="#treatment-report-mllp-over-tcpip">Treatment Report (MLLP over TCP/IP)</a></li> 
+        <li><a href="#treatment-report-filesystem">Treatment Report (Filesystem)</a></li> 
+       </ul></li> 
+     </ul> 
+     <h2 id="overview">Overview</h2> 
+     <p>GPD provides two aspects of HL7 integration:</p> 
+     <ol type="1"> 
+      <li>Retrieval of patient information by querying the EMR for a given Patient ID.</li> 
+      <li>Generation of an HL7 message either containing (via Base64 encoding) or referencing the path of a treatment-report PDF.</li> 
+     </ol> 
+     <p>The formats of the query and treatment-report messages, and the interpretation of the reponse to the patient query, are all configured via templates, which are described below.</p> 
+     <h2 id="preferences">Preferences</h2> 
+     <p>The HL7 tab in program preferences controls GPD’s interface with an EMR system:</p> 
+     <p><img src="images/hl7-prefs.png" alt="HL7 Preferences"></p> 
+     <ul> 
+      <li><p><strong>IP Address &amp; Port</strong></p> <p>The network address of the server with which GPD will exchange MLLP-framed HL7 messages.</p></li> 
+      <li><p><strong>Advanced Socket Options</strong></p> 
+       <ul> 
+        <li><p><strong>Network Timeout</strong></p> <p>When GPD is waiting to receive or send data over the network, it will wait the specified number of seconds before aborting.</p></li> 
+        <li><p><strong>Half-Close socket when sending query</strong></p> <p>When issuing a query, GPD will re-use the same socket connection to receive the server's reply. A TCP/IP socket can be put into a half-closed state, which may be required by some servers to recognize that the query message has finished sending. Generally you should not enable this option.</p></li> 
+        <li><p><strong>Close socket after MLLP reply</strong></p> <p>If this box is checked, when reading a query response from the server, GPD will stop reading from and close the socket after it encounters the first MLLP end marker <code>&amp;lt;0x1C&gt;</code>. If unchecked, GPD will continue to receive data until the server closes the socket. This option generally should be enabled.</p></li> 
+       </ul></li> 
+      <li><p><strong>Drop Folder</strong></p> <p>Filesystem folder to save HL7 messages. <code>Choose…</code> to select a folder.</p></li> 
+      <li><p><strong>Use HL7 query to retrieve new patient info</strong></p> <p>Check to enable retrieval of patient info via an HL7 query. If checked, when you add a new patient, you will be able to choose between using an HL7 query and entering the name and ID manually.</p></li> 
+      <li><p><strong>Generate HL7 message after treatment</strong></p> <p>Automatically generate an HL7 message after treatment data is collected.</p></li> 
+      <li><p><strong>Save message to drop folder</strong></p> <p>Save the generated HL7 message to the chosen drop folder.</p></li> 
+      <li><p><strong>Send message via MLLP</strong></p> <p>Send the generated message to the specified server via MLLP.</p></li> 
+      <li><p><strong>Edit Query/Patient/Treatment Message Templates</strong></p> <p>Edit the respective template in a text-editor window.</p></li> 
+     </ul> 
+     <h2 id="templates">Templates</h2> 
+     <h3 id="patient-query-template">Patient Query Template</h3> 
+     <p>The query template specifies the contents of the HL7 message that will be sent to the server to retrieve patient information when adding a new patient.</p> 
+     <p>Here is an example of one such template:</p> 
+     <pre><code># PROMPT PATIENT ID &lt;- Query Patient ID:
+# SET COUNTRY CODE = AU
+
+MSH.3: BOS
+MSH.4: EF
+MSH.5: IPM
+MSH.6: ISOFT
+MSH.7: ${MESSAGE TIMESTAMP}
+MSH.9.1: QRY
+MSH.9.2: A19
+MSH.10: BOS*${UNIQUE ID}
+MSH.11: P
+MSH.12: 2.3.1
+MSH.17: ${COUNTRY CODE}
+MSH.18: ASCII
+MSH.19.1: ENG
+MSH.19.2.1: English
+MSH.19.2.2: r
+QRD.1: ${MESSAGE TIMESTAMP}
+QRD.2: R
+QRD.3: I
+QRD.4: BOS
+QRD.7.1: 1
+QRD.7.2: RD
+QRD.8.1: ${PATIENT ID}
+QRD.8.13: PAS
+QRD.9: DEM
+QRD.10.1.1: ALL
+QRD.10.1.2: r</code></pre> 
+     <p>It is a simple mapping from HL7 fields to their values. The segments should be given in the correct order for the resulting message type (here <code>QRY_A19</code>) because GPD does not rearrange segments to ensure the proper order for each message type.</p> 
+     <p>HL7 field specifications (ex. <code>QRD.7.1</code>) are separated from their values by a colon. Variable values <a href="Patient-and-Treatment-Templates.html#variable-syntax">will be expanded</a> as in patient and treatment templates.</p> 
+     <p>At the top of the template you’ll notice two directive lines – a directive line begins with a hash mark ‘#’ followed by a command (i.e. <code>PROMPT</code> or <code>SET</code>), a variable name (here <code>PATIENT ID</code> and <code>COUNTRY CODE</code>), a <code>&lt;-</code> or <code>=</code>, and the “value” of the variable. What the value means depends on the directive:</p> 
+     <ul> 
+      <li>For <code>PROMPT</code> commands, the value is the prompt that will be displayed to the user; it is the user’s typed response to the prompt that will be used as the variable’s value.</li> 
+      <li>For <code>SET</code> commands, the variable is set directly to the value with no user interaction.</li> 
+     </ul> 
+     <p>In either case, the variable can then be used both in the Patient Query Template – as above, where <code>QRD.8.1</code> is set to the patent ID that the user entered – and in the Patient Info Template, described below. Note that if no <code>PROMPT</code> directives are found in the Patient Query Template, GPD will prompt the user for a Patient ID and assign the response to the variable <code>PATIENT ID</code>.</p> 
+     <p>The variables available in the query template are</p> 
+     <ul> 
+      <li><code>${MESSAGE TIMESTAMP}</code> – the timestamp (in HL7 format) when the query was generated.</li> 
+      <li><code>${UNIQUE ID}</code> – A unique string (generated from a random UUID).</li> 
+      <li>Any variables defined using <code>PROMPT</code> or <code>SET</code> directives.</li> 
+     </ul> 
+     <p>When a new patient is created via an HL7 query, the query response is saved as an associated file for that patient. It can serve as a reference to the original information, and also enables <a href="#passthrough-segments-and-response-field-variables">passthrough segments and response field variables</a> in the treatment message template.</p> 
+     <h3 id="patient-info-template">Patient Info Template</h3> 
+     <p>This is the flip side of the Patient Query Template – it specifies how the message returned by the EMR will be mapped to patient information in GPD.</p> 
+     <p>Here’s an example:</p> 
+     <pre><code>    Name: ${PID.5.1}, ${PID.5.2}, ${PID.5.5}
+
+    PATIENT ID: ${QRD.8.1}
+
+    DOB: ${PID.7}
+    SEX: ${PID.8}
+
+    Result Interpreter Prefix:       Dr. 
+    Result Interpreter Given Name:   Ryan 
+    Result Interpreter Surname:      Spencer
+
+    Reason For Study: 
+      &gt;  
+      &gt; </code></pre> 
+     <p>Any variables defined using <code>PROMPT</code> or <code>SET</code> directives in the query template (or the implicit <code>PATIENT ID</code> if no <code>PROMPT</code> directives were found) are available. Other than those, all <code>${<em>VARIABLE</em>}</code> expansions refer to fields in the HL7 message returned by the server.</p> 
+     <p>The only field required by GPD itself is the <code>Name:</code> field at the top of the template; the rest are up to the user.</p> 
+     <h3 id="treatment-message-template">Treatment Message Template</h3> 
+     <p>This template determines the format of the HL7 message that will be generated after treatment data is collected. An example:</p> 
+     <pre><code>    # SET %IP ADDRESS% = 192.168.4.211
+    # SET %PORT% = 42175
+
+    MSH.3: ECT-base64_base64
+    MSH.4: ECT
+    MSH.5: PAS
+    MSH.6: PAS
+    MSH.7: ${MESSAGE TIMESTAMP}
+    MSH.9.1: MDM
+    MSH.9.2: T02
+    MSH.10: ${UNIQUE ID}
+    MSH.11.1: P
+    MSH.11.2: T
+    MSH.12: 2.6
+    MSH.18: UNICODE UTF-8
+    EVN.1: T02
+    EVN.2: ${TREATMENT TIMESTAMP}
+    PID.3.1: ${PATIENT ID}
+    PID.3.4: Default
+    PID.3.5: PAS
+    PID.5.1: ${PID.5.1}
+    PID.5.2: ${PID.5.2}
+    PID.5.4: ${PID.5.4}
+    PID.5.5: ${PID.5.5}
+    PID.7: ${PID.7}
+    PID.8: ${PID.8}
+    PV1: ${PASSTHROUGH}
+    ORC.1: RE
+    ORC.5: CM
+    ORC.9: ${MESSAGE TIMESTAMP}
+    OBR.1: 1
+    OBR.4.2: Adult
+    OBR.7: ${TREATMENT TIMESTAMP}
+    OBR.8: ${TREATMENT TIMESTAMP}
+    OBR.20: 1
+    OBR.22: ${MESSAGE TIMESTAMP}
+    OBR.24: CUS
+    OBR.25: F
+    OBR.31.2: ${REASON FOR STUDY}
+    OBR.32.1.2: ${RESULT INTERPRETER SURNAME}
+    OBR.32.1.3: ${RESULT INTERPRETER GIVEN NAME}
+    OBR.32.1.6: ${RESULT INTERPRETER PREFIX}
+    OBR.32.2: ${TREATMENT TIMESTAMP}
+    OBR.32.3: ${TREATMENT TIMESTAMP}
+    OBR.34.1.2: VT
+    TXA.1: ${UNIQUE ID}
+    TXA.2: DI
+    TXA.3: AP
+    TXA.7: ${TREATMENT TIMESTAMP}
+    TXA.12: ${PATIENT ID}-${TREATMENT TIMESTAMP}
+    TXA.16: ${PDF FILENAME}
+    TXA.17: LA
+    OBX.1: 1
+    OBX.2: ED
+    OBX.3.1: FIND
+    OBX.3.2: FINDINGS
+    OBX.3.3: LB
+    OBX.4: 2
+    OBX.5.1: DOC
+    OBX.5.2: ED
+    OBX.5.3: PDF
+    OBX.5.4: Base64
+    OBX.5.5: ${PDF BASE64}
+    OBX.11: F</code></pre> 
+     <p>In this template we once again have certain special variables:</p> 
+     <ul> 
+      <li><code>${MESSAGE TIMESTAMP}, ${UNIQUE ID}</code> – Same meanings as in the Query Template</li> 
+      <li><code>${TREATMENT TIMESTAMP}</code> – HL7 timestamp of the time of treatment collection.</li> 
+      <li><code>${PDF FILENAME}</code> – filename of the generated PDF treatment report.</li> 
+      <li><code>${PDF PATH}</code> <code>–</code> path to the generated PDF treatment report. This path will be valid until the user quits GPD.</li> 
+      <li><code>${PDF BASE64}</code> – PDF contents in Base64 encoding.</li> 
+      <li>Any variables defined using <code>PROMPT</code> or <code>SET</code> directives.</li> 
+     </ul> 
+     <p>All other variable values are taken from the patient and treatment information as entered by the user, like <code>${REASON FOR STUDY}</code> in the example, or from passthrough segments and query response field values, both of which are described below.</p> 
+     <h4 id="passthrough-segments-and-response-field-variables">Passthrough Segments and Response Field Variables</h4> 
+     <p>If the patient or treatment was originally created via an HL7 query, then you have two additional features available in the treatment message template: passthrough segments, and response field variables. A passthrough segment looks like</p> 
+     <pre><code>    PV1: ${PASSTHROUGH}</code></pre> 
+     <p>(where <code>PV1</code> can be any segment ID). When GPD is generating the HL7 treatment message, it will pass through, unchanged, any corresponding segments that were received in the server query response.</p> 
+     <p>Additionally, you can refer to field values from the query response messages using the standard HL7 field value syntax, ex <code>${QRD.8.1}</code>. In the example template, these are used to set the value of various fields of the <code>PID</code> segment.</p> 
+     <h3 id="setting-network-preferences-in-templates">Setting Network Preferences in Templates</h3> 
+     <p>The settings chosen on the <a href="#preferences">HL7 tab</a> of Preferences (IP address, etc.) are the default connection parameters; a particular template can override any of those settings. The method of doing this is to use the <code>SET</code> directive to change the value of one of the below special variables. Note that all of the special variable names start and end with percent <code>%</code> characters.</p> 
+     <table> 
+      <thead> 
+       <tr class="header"> 
+        <th style="text-align: left;">Variable Name</th> 
+        <th style="text-align: left;">Corresponding Preference</th> 
+       </tr> 
+      </thead> 
+      <tbody> 
+       <tr class="odd"> 
+        <td style="text-align: left;"><code>%IP ADDRESS%</code></td> 
+        <td style="text-align: left;">IP address</td> 
+       </tr> 
+       <tr class="even"> 
+        <td style="text-align: left;"><code>%PORT%</code></td> 
+        <td style="text-align: left;">Port</td> 
+       </tr> 
+       <tr class="odd"> 
+        <td style="text-align: left;"><code>%TIMEOUT%</code></td> 
+        <td style="text-align: left;">Network timeout (in seconds)</td> 
+       </tr> 
+       <tr class="even"> 
+        <td style="text-align: left;"><code>%HALF CLOSE%</code></td> 
+        <td style="text-align: left;">Half-close socket when sending query (true or false)</td> 
+       </tr> 
+       <tr class="odd"> 
+        <td style="text-align: left;"><code>%MLLP CLOSE%</code></td> 
+        <td style="text-align: left;">Close socket after MLLP reply (true or false)</td> 
+       </tr> 
+      </tbody> 
+     </table> 
+     <p>An example of setting connection preferences:</p> 
+     <pre><code># SET %IP ADDRESS% = 192.168.4.211
+# SET %HALF CLOSE% = false</code></pre> 
+     <h2 id="network-transport-and-file-format">Network Transport and File Format</h2> 
+     <h3 id="patient-query-mllp-over-tcpip">Patient Query (MLLP over TCP/IP)</h3> 
+     <p>GPD opens a TCP/IP socket connection to the specified IP address and port and sends the query message in MLLP-block format:</p> 
+     <p> <code>&lt;0x0B&gt;HL7-MESSAGE&lt;0X1C&gt;&lt;0X0D&gt;</code></p> 
+     <p>It waits on the same socket connection to read a reply from the server, also in MLLP-block format. If the <em>Close socket after MLLP reply</em> preference is checked, GPD will close the socket once the message is received; otherwise, GPD will wait for the server to close the socket.</p> 
+     <h3 id="treatment-report-mllp-over-tcpip">Treatment Report (MLLP over TCP/IP)</h3> 
+     <p>GPD opens a TCP/IP socket connection to the specified IP address and port and sends the treatment report message in MLLP-block format. After the bytes are transmitted, GPD closes the socket without reading an acknowledgement.</p> 
+     <h3 id="treatment-report-filesystem">Treatment Report (Filesystem)</h3> 
+     <p>GPD writes the bytes of the treatment report message to the file in standard HL7 format with carriage returns (<code>0x0D</code>) at the end of each segment.</p> 
+    </article> 
+    <div class="pfwiki-footer"> 
+     <p>© 2020 Elektrika, Inc.</p> 
+    </div> 
+   </div> 
+  </div>  
+ </body>
+</html>

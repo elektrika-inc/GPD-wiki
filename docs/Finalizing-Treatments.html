@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en"> 
+ <head> 
+  <meta charset="utf-8"> 
+  <meta name="generator" content="pfwiki"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"> 
+  <title>Finalizing Treatments</title> 
+  <style type="text/css">
+    code{white-space: pre;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style> 
+  <link rel="stylesheet" href="GPD-wiki.css"> 
+  <link rel="stylesheet" href="pygments-highlight.css"> <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]--> 
+ </head> 
+ <body> 
+  <div class="pfwiki-wrapper"> 
+   <div id="pfwiki-sidebar-anchor" class="pfwiki-sidebar"> 
+    <div class="small-screen-jump-links"> <a href="#pfwiki-body-anchor">Jump to Top</a> 
+    </div> 
+    <h1>GPD Wiki Pages</h1> 
+    <ul> 
+     <li><a href="Home.html">Introduction (Home)</a></li> 
+     <li><a href="List-of-Guides.html">List of Guides</a></li> 
+     <li><a href="Getting-Started.html">Getting Started</a></li> 
+     <li><a href="Configuration-and-Deployment.html">Configuration and Deployment</a></li> 
+     <li><a href="Database-Fields.html">Database Fields</a></li> 
+     <li><a href="Patient-and-Treatment-Templates.html">Patient and Treatment Templates</a></li> 
+     <li><a href="Analysis.html">Analysis</a></li> 
+     <li><a href="Customizing-PDF-Treatment-Reports.html">Customizing PDF Treatment Reports</a></li> 
+     <li><a href="HL7-Functionality.html">HL7 Functionality</a></li> 
+     <li><a href="Markers.html">Markers</a></li> 
+     <li><a href="Finalizing-Treatments.html">Finalizing Treatments</a></li> 
+     <li><a href="Patient-Summary-Reports.html">Patient Summary Reports</a></li> 
+     <li><a href="Preferences.html">Preferences</a></li> 
+     <li><a href="Keyboard-Shortcuts.html">Keyboard Shortcuts</a></li> 
+     <li><a href="Additional-Thanks.html">Additional Thanks</a></li> 
+    </ul> 
+   </div> 
+   <div id="pfwiki-body-anchor" class="pfwiki-body-wrapper"> 
+    <article class="markdown-body"> 
+     <header> 
+      <div class="small-screen-jump-links"> <a href="#pfwiki-sidebar-anchor">Jump to Sidebar</a> 
+      </div> 
+      <h1 class="title">Finalizing Treatments</h1> 
+     </header> <!-- Finalizing Treatments --> 
+     <h3 id="on-this-page">On this Page</h3> 
+     <ul> 
+      <li><a href="#overview">Overview</a></li> 
+      <li><a href="#preferences">Preferences</a></li> 
+      <li><a href="#patient-and-treatment-list-controls">Patient and Treatment List Controls</a></li> 
+     </ul> 
+     <h2 id="overview">Overview</h2> 
+     <p>Most often, you will want to save the results of your treatment in some external format – a PDF report or HL7 message – for integration into an EMR or archival. A treatment that has been successfully exported is said to be <em>finalized</em>, and if all the treatments of a given patient have been finalized, then that patient is said to be finalized as well. GPD provides a few mechanisms to mark treatments as finalized, and to spot treatments and patients that have not yet been finalized.</p> 
+     <h2 id="preferences">Preferences</h2> 
+     <p>The Preferences window has a tab that allows you to set finalization options:</p> 
+     <p><img src="images/finalization-pref.png" alt="Finalization Preferences"></p> 
+     <ul> 
+      <li><p><strong>Show finalization status in treatment list</strong></p> <p>If checked, in the treatment list the date/time will be annotated to indicate whether that treatment has been finalized.</p></li> 
+      <li><p><strong>Finalized display values</strong></p> <p>This lets you set the text that is shown in the treatment list (and as a field value, see below) when a treatment is finalized or not finalized, respectively. The default values are a check mark<sup>1</sup> "√" for finalized treatments, and blank text for those that are not.</p> 
+       <blockquote> 
+        <p><sup>1</sup> Actually a square root sign, U+221A, to be compatible with more fonts.</p> 
+       </blockquote></li> 
+      <li><p><strong>Finalize after HL7 message generation</strong></p> <p>If checked, when a treatment is successfully saved as an HL7 message in the drop-folder or transmitted via MLLP, it will be marked as finalized.</p></li> 
+      <li><p><strong>Finalized after post-collection PDF export</strong></p> <p>If checked, after a treatment report is automatically saved as a PDF (via the <em>Export/Printing→Save Treatment Report PDF after collection</em> preference) the treatment will be marked as finalized.</p></li> 
+     </ul> 
+     <h2 id="patient-and-treatment-list-controls">Patient and Treatment List Controls</h2> 
+     <p>In the treatment list, you can select the <em>Treatment→Mark as finalized</em> menu item (or press the shortcut key <code>Ctrl+K</code>) to mark a treatment as finalized; likewise with <em>Treatment</em>→<em>Unmark as finalized</em> (<code>Shift+Ctrl+K</code>). If the <em>Show finalization status in treatment list</em> preference is checked, you'll see the finalization status of the treatment in the list at the left of the window.</p> 
+     <p>In the patient list, the <em>View→Show only unfinalized patients</em> (<code>Ctrl+U</code>) menu item will, if checked, filter the table of patients so that only those whose treatments have not all been finalized are shown. Since the finalization status of a patient is accessible as a <a href="Database-Fields.html">field</a> named "FINALIZED", you can set one of the columns in the patient table (using <em>View→Configure Table Columns</em>) to show that field, and then sort by it. By pressing <code>Ctrl+U</code>, you can quickly toggle between showing all patients and only those still unfinalized.</p> 
+    </article> 
+    <div class="pfwiki-footer"> 
+     <p>© 2020 Elektrika, Inc.</p> 
+    </div> 
+   </div> 
+  </div>  
+ </body>
+</html>

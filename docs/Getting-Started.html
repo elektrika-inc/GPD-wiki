@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en"> 
+ <head> 
+  <meta charset="utf-8"> 
+  <meta name="generator" content="pfwiki"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"> 
+  <title>Getting Started</title> 
+  <style type="text/css">
+    code{white-space: pre;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style> 
+  <link rel="stylesheet" href="GPD-wiki.css"> 
+  <link rel="stylesheet" href="pygments-highlight.css"> <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]--> 
+ </head> 
+ <body> 
+  <div class="pfwiki-wrapper"> 
+   <div id="pfwiki-sidebar-anchor" class="pfwiki-sidebar"> 
+    <div class="small-screen-jump-links"> <a href="#pfwiki-body-anchor">Jump to Top</a> 
+    </div> 
+    <h1>GPD Wiki Pages</h1> 
+    <ul> 
+     <li><a href="Home.html">Introduction (Home)</a></li> 
+     <li><a href="List-of-Guides.html">List of Guides</a></li> 
+     <li><a href="Getting-Started.html">Getting Started</a></li> 
+     <li><a href="Configuration-and-Deployment.html">Configuration and Deployment</a></li> 
+     <li><a href="Database-Fields.html">Database Fields</a></li> 
+     <li><a href="Patient-and-Treatment-Templates.html">Patient and Treatment Templates</a></li> 
+     <li><a href="Analysis.html">Analysis</a></li> 
+     <li><a href="Customizing-PDF-Treatment-Reports.html">Customizing PDF Treatment Reports</a></li> 
+     <li><a href="HL7-Functionality.html">HL7 Functionality</a></li> 
+     <li><a href="Markers.html">Markers</a></li> 
+     <li><a href="Finalizing-Treatments.html">Finalizing Treatments</a></li> 
+     <li><a href="Patient-Summary-Reports.html">Patient Summary Reports</a></li> 
+     <li><a href="Preferences.html">Preferences</a></li> 
+     <li><a href="Keyboard-Shortcuts.html">Keyboard Shortcuts</a></li> 
+     <li><a href="Additional-Thanks.html">Additional Thanks</a></li> 
+    </ul> 
+   </div> 
+   <div id="pfwiki-body-anchor" class="pfwiki-body-wrapper"> 
+    <article class="markdown-body"> 
+     <header> 
+      <div class="small-screen-jump-links"> <a href="#pfwiki-sidebar-anchor">Jump to Sidebar</a> 
+      </div> 
+      <h1 class="title">Getting Started</h1> 
+     </header> <!-- Getting Started --> 
+     <h3 id="on-this-page">On this Page</h3> 
+     <ul> 
+      <li><a href="#starting-up">Starting Up</a></li> 
+      <li><a href="#create-user-account">Create User Account</a></li> 
+      <li><a href="#patient-list">Patient List</a></li> 
+      <li><a href="#treatment-list">Treatment List</a></li> 
+      <li><a href="#monitoring-window">Monitoring Window</a></li> 
+      <li><a href="#reviewing-a-treatment-graph">Reviewing a Treatment Graph</a></li> 
+      <li><a href="#exiting-gpd">Exiting GPD</a></li> 
+     </ul> 
+     <h2 id="starting-up">Starting Up</h2> 
+     <p>After you enter your license information, you'll be presented with the Login window:</p> 
+     <p><img src="images/login.png" alt="Login Window"></p> 
+     <h2 id="create-user-account">Create User Account</h2> 
+     <p>The first thing to do is create a user account:</p> 
+     <ol type="1"> 
+      <li><p>Click <em>Create/Manage Users</em> (no password is needed by default). The Manage Users window will appear:</p> <p><img src="images/manage-users.png" alt="Manage Users Dialog"></p></li> 
+      <li><p>Click <em>New User</em> and choose your username.</p></li> 
+      <li><p>The new user will appear in the USERS list; select the user and click <em>Change Password</em> to set the password for that user. You may leave the password blank if you want to be able to log in without a password.</p></li> 
+      <li><p>If you want to restrict who may create and delete users, set an administrator password by typing the password into the text field and pressing the <em>Set Admin Password</em> button.</p></li> 
+     </ol> 
+     <p>Now, back at the Login screen, enter your username and password and click <em>Login</em>, and you're be presented with the Patient List.</p> 
+     <h2 id="patient-list">Patient List</h2> 
+     <p><img src="images/patient-list.png" alt="Patient List"></p> 
+     <p>On the left is a list of the user's patients, and on the right is the editable information for the selected patient.</p> 
+     <p>Click <em>New Patient</em>, enter a name and ID, and the created patient will appear in the table to the left.</p> 
+     <p>Double click the patient in the table to go to the Treatment List for that patient.</p> 
+     <h2 id="treatment-list">Treatment List</h2> 
+     <p><img src="images/treatment-list.png" alt="Treatment List"></p> 
+     <p>Here you see all the treatments for a given patient, listed by treatment date in descending order (most recent at the top). Click a treatment in the list to see its information in the pane on the right.</p> 
+     <p>To see real-time monitoring graphs and collect data for a new ECT treatment, click the <code>COLLECT&nbsp;NEW</code> button at the bottom of the treatment list, which will open the Monitoring window.</p> 
+     <h2 id="monitoring-window">Monitoring Window</h2> 
+     <p><img src="images/monitoring-window.png" alt="Monitoring Window"></p> 
+     <p>In its default configuration, GPD will begin monitoring as soon as the window is open. Once your collect baseline on the Thymatron, it will begin transmitting real-time data via its RS232 serial connection.</p> 
+     <p>You can show or hide channels, and change each channel's vertical scale, using the controls on the left of the window. The horizontal scale is controlled by the combobox on the bottom left. The time (in seconds) is displayed at the bottom of the graph, and the segment numbers (each segment being 1.28s) on the top.</p> 
+     <p>For most efficient data upload from the Thymatron, turn on autoupload of all data (FlexDial→<code>UPLOAD</code>→<code>LOAD RAW</code>), so that when the user presses Start/Stop post-treatment, the Thymatron will automatically send complete treatment data to GPD.</p> 
+     <p>Once GPD receives treatment data from the Thymatron, the Monitoring screen will close and you will see the new treatment at the top of the Treatment List. Selecting the new treatment will show the treatment report, with the same information as the report printed by the machine, in the right text pane.</p> 
+     <h2 id="reviewing-a-treatment-graph">Reviewing a Treatment Graph</h2> 
+     <p>In the Treatment List, if you double-click a treatment (or press <code>Enter</code> or click the <code>View</code> button) the treatment graph will invoke the Review Treatment window. By default, treatments will have both <code>DAT</code> and <code>GPDT</code> files associate with them. The <code>DAT</code> contains only post-treatment data as sent by the Thymatron, while the <code>GPDT</code> contains all data since you started monitoring. You need to choose which one of these two files to view.</p> 
+     <p><img src="images/review-window.png" alt="Review Window"></p> 
+     <p>The channel and scale controls are much like the Monitoring/Collection window, but rather than seeing the real-time graph sweep across the screen, you can use the scrollbar below the timeline to navigate to any point in the traces.</p> 
+     <h2 id="exiting-gpd">Exiting GPD</h2> 
+     <p>Close the Treatment List to return to the Patient List; close the Patient List to return to the Login screen; close the Login screen to exit GPD.</p> 
+    </article> 
+    <div class="pfwiki-footer"> 
+     <p>© 2020 Elektrika, Inc.</p> 
+    </div> 
+   </div> 
+  </div>  
+ </body>
+</html>

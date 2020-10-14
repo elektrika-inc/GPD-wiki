@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en"> 
+ <head> 
+  <meta charset="utf-8"> 
+  <meta name="generator" content="pfwiki"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"> 
+  <title>Analysis</title> 
+  <style type="text/css">
+    code{white-space: pre;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style> 
+  <link rel="stylesheet" href="GPD-wiki.css"> 
+  <link rel="stylesheet" href="pygments-highlight.css"> <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]--> 
+ </head> 
+ <body> 
+  <div class="pfwiki-wrapper"> 
+   <div id="pfwiki-sidebar-anchor" class="pfwiki-sidebar"> 
+    <div class="small-screen-jump-links"> <a href="#pfwiki-body-anchor">Jump to Top</a> 
+    </div> 
+    <h1>GPD Wiki Pages</h1> 
+    <ul> 
+     <li><a href="Home.html">Introduction (Home)</a></li> 
+     <li><a href="List-of-Guides.html">List of Guides</a></li> 
+     <li><a href="Getting-Started.html">Getting Started</a></li> 
+     <li><a href="Configuration-and-Deployment.html">Configuration and Deployment</a></li> 
+     <li><a href="Database-Fields.html">Database Fields</a></li> 
+     <li><a href="Patient-and-Treatment-Templates.html">Patient and Treatment Templates</a></li> 
+     <li><a href="Analysis.html">Analysis</a></li> 
+     <li><a href="Customizing-PDF-Treatment-Reports.html">Customizing PDF Treatment Reports</a></li> 
+     <li><a href="HL7-Functionality.html">HL7 Functionality</a></li> 
+     <li><a href="Markers.html">Markers</a></li> 
+     <li><a href="Finalizing-Treatments.html">Finalizing Treatments</a></li> 
+     <li><a href="Patient-Summary-Reports.html">Patient Summary Reports</a></li> 
+     <li><a href="Preferences.html">Preferences</a></li> 
+     <li><a href="Keyboard-Shortcuts.html">Keyboard Shortcuts</a></li> 
+     <li><a href="Additional-Thanks.html">Additional Thanks</a></li> 
+    </ul> 
+   </div> 
+   <div id="pfwiki-body-anchor" class="pfwiki-body-wrapper"> 
+    <article class="markdown-body"> 
+     <header> 
+      <div class="small-screen-jump-links"> <a href="#pfwiki-sidebar-anchor">Jump to Sidebar</a> 
+      </div> 
+      <h1 class="title">Analysis</h1> 
+     </header> <!-- Analysis --> 
+     <h3 id="on-this-page">On this Page</h3> 
+     <ul> 
+      <li><a href="#usage">Usage</a></li> 
+      <li><a href="#treatments-chart">Treatments Chart</a></li> 
+      <li><a href="#treatments-graph">Treatments Graph</a></li> 
+      <li><a href="#preferences-for-treatment-chart-and-graph">Preferences for Treatment Chart and Graph</a></li> 
+     </ul> 
+     <h2 id="usage">Usage</h2> 
+     <p>From the <code>Analysis</code> menu of the Treatment List you can access the <code>Treatments Chart</code> and <code>Treatments Graph</code>. The operation of these two choices is similar (except for the way the data is presented).</p> 
+     <p>First you select the treatments you want to include in your analysis.</p> 
+     <p><img src="images/choose-treatments-dialog.png" alt="Choose Treatments Dialog"></p> 
+     <p>By default, all are selected, but you can <code>Ctrl</code>-click and <code>Shift</code>-click with the mouse to select or deselect individual treatments or a range of treatments. At that point, you will see the Choose Treatment Fields Dialog:</p> 
+     <p><img src="images/choose-treatment-fields-dialog.png" alt="Choose Treatment Fields Dialog"></p> 
+     <p>The Available Treatment Fields are gathered automatically from the textual info of the selected treatments (see <a href="Database-Fields.html">Database Fields</a> for more details). You can use the <code>→</code> button to add selected fields to the list on the right, which is what will be shown in the chart/graph. The buttons on the far right – <code>↑</code>, <code>↓</code>, and <code>X</code> – move the selected field(s) up, down, or remove them, respectively.</p> 
+     <p><img src="images/configurations-dialog.png" alt="Configurations Dialog"></p> 
+     <p>You can <code>Make</code> the current selected fields <code>Default</code> so that they'll be automatically loaded when you open this screen, you can <code>Load</code> the <code>Default</code> field configuration, or you can manage named configurations by clicking <code>Save/Load Fields Configuration</code>.</p> 
+     <p>Here you have a list of your saved configurations (<code>DEFAULT</code> is a special name used for the default configuration, and <code>PRINT</code> for the Printable Treatment Chart), and below it, a text field where you can type a new configuration name to save.</p> 
+     <p>Back to the Choose Treatment Fields screen –</p> 
+     <p>Once you click <code>Proceed</code>, the chart or graph will appear.</p> 
+     <h2 id="treatments-chart">Treatments Chart</h2> 
+     <p><img src="images/treatment-charts.png" alt="Treatments Chart"></p> 
+     <p>The chart is <em>sortable</em> (by clicking on the column headers), <em>re-arrangeable</em> (drag a column header with the mouse), and you can <code>Export</code> the table of data to CSV (comma-separated value) format to further analyze in Excel or another statistical package.</p> 
+     <p>Clicking <code>Configure Columns</code> will close the chart and show the <code>Treatment Selection</code> and <code>Field Selection</code> dialogs again.</p> 
+     <p>The <code>Edit Treatment Info</code> button lets you edit the selected treatment info. If you modify a field shown in the chart, the chart will be updated.</p> 
+     <p>The <code>Edit Patient Info</code> button lets you edit the patient info without leaving the screen.</p> 
+     <p><code>Print Table</code> allows you to print the table. If you have a PDF printer installed, such as Adobe Acrobat or Foxit, you can save the printed chart to a PDF file.</p> 
+     <p>On the <code>Analysis</code> menu of the Treatments List, there is also a <code>Default Treatments Chart</code> item: once you set a default configuration in the <code>Choose Treatment Fields</code> dialog, you can quickly call up the default chart using this menu item.</p> 
+     <p>The <code>Printable Treatments Chart</code> menu item is similar, except that it will load a field configuration named <code>PRINT</code> before displaying the table.</p> 
+     <h2 id="treatments-graph">Treatments Graph</h2> 
+     <p><img src="images/treatments-graph.png" alt="Treatments Graph"></p> 
+     <p>The graph shows a plot of selected treatment fields across dates (oldest treatments at the left, newest on the right). For each treatment field you selected previously, an axis will be shown, specifying the unit of that field's values, if any. You can hover the mouse over a data point to see its precise value.</p> 
+     <p>A button allows you to <code>Export Graph to PNG</code>, so that it can be included elsewhere.</p> 
+     <p>Clicking <code>Configure Graph Fields</code> will close the graph and show the <code>Treatment Selection</code> and <code>Field Selection</code> dialogs again.</p> 
+     <h2 id="preferences-for-treatment-chart-and-graph">Preferences for Treatment Chart and Graph</h2> 
+     <p>The <code>Treatment List/Chart</code> tab in Preferences allows certain configuration of the Analysis functions.</p> 
+     <p><img src="images/analysis-preferences.png" alt="Analysis Preferences"></p> 
+     <p><strong>Treatment Window Title</strong><br> By using the <a href="Patient-and-Treatment-Templates.html#variable-syntax">variable syntax</a> from templates, you can customize the title text of the Treatment Window.</p> 
+     <p><strong>Chart Font Size &amp; Cell Alignment</strong><br> Control how the values shown in the Treatments Chart are displayed.</p> 
+     <p><strong>Include All Patient Info in Treatments Chart Printout</strong><br> If checked, when you print the chart the entire patient info text will be included on the first page, rather than just the text shown in the window title.</p> 
+     <p><strong>Remove units from values in chart and exported CSV files</strong><br> If checked, the values of a fields that have a unit (ex. <code>10 µV²</code>) will be modified to strip off the unit, so that only <code>10</code> is displayed. This applies both to the on-screen chart and CSV exports.</p> 
+     <p><strong>Fit Treatments Chart width to page</strong><br> If checked, chart columns will be resized to make the entire chart fit on the page, rather than spanning multiple pages horizontally.</p> 
+     <p><strong>Show all treatment fields for Analysis</strong><br> If checked, then even if a field appears in only one treatment, it will be shown in the Choose Treatment Fields dialog when configuring an analysis window. If unchecked, only fields that appear two or more times will be shown.</p> 
+     <p><strong>Show default chart when patient is selected</strong><br> If checked, when you double-click a patient in the Patient List, instead of going to the Treatment List, you will be taken directly to the default chart.</p> 
+    </article> 
+    <div class="pfwiki-footer"> 
+     <p>© 2020 Elektrika, Inc.</p> 
+    </div> 
+   </div> 
+  </div>  
+ </body>
+</html>

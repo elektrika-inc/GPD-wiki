@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en"> 
+ <head> 
+  <meta charset="utf-8"> 
+  <meta name="generator" content="pfwiki"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"> 
+  <title>Customizing PDF Treatment Reports</title> 
+  <style type="text/css">
+    code{white-space: pre;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style> 
+  <link rel="stylesheet" href="GPD-wiki.css"> 
+  <link rel="stylesheet" href="pygments-highlight.css"> <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]--> 
+ </head> 
+ <body> 
+  <div class="pfwiki-wrapper"> 
+   <div id="pfwiki-sidebar-anchor" class="pfwiki-sidebar"> 
+    <div class="small-screen-jump-links"> <a href="#pfwiki-body-anchor">Jump to Top</a> 
+    </div> 
+    <h1>GPD Wiki Pages</h1> 
+    <ul> 
+     <li><a href="Home.html">Introduction (Home)</a></li> 
+     <li><a href="List-of-Guides.html">List of Guides</a></li> 
+     <li><a href="Getting-Started.html">Getting Started</a></li> 
+     <li><a href="Configuration-and-Deployment.html">Configuration and Deployment</a></li> 
+     <li><a href="Database-Fields.html">Database Fields</a></li> 
+     <li><a href="Patient-and-Treatment-Templates.html">Patient and Treatment Templates</a></li> 
+     <li><a href="Analysis.html">Analysis</a></li> 
+     <li><a href="Customizing-PDF-Treatment-Reports.html">Customizing PDF Treatment Reports</a></li> 
+     <li><a href="HL7-Functionality.html">HL7 Functionality</a></li> 
+     <li><a href="Markers.html">Markers</a></li> 
+     <li><a href="Finalizing-Treatments.html">Finalizing Treatments</a></li> 
+     <li><a href="Patient-Summary-Reports.html">Patient Summary Reports</a></li> 
+     <li><a href="Preferences.html">Preferences</a></li> 
+     <li><a href="Keyboard-Shortcuts.html">Keyboard Shortcuts</a></li> 
+     <li><a href="Additional-Thanks.html">Additional Thanks</a></li> 
+    </ul> 
+   </div> 
+   <div id="pfwiki-body-anchor" class="pfwiki-body-wrapper"> 
+    <article class="markdown-body"> 
+     <header> 
+      <div class="small-screen-jump-links"> <a href="#pfwiki-sidebar-anchor">Jump to Sidebar</a> 
+      </div> 
+      <h1 class="title">Customizing PDF Treatment Reports</h1> 
+     </header> <!-- Customizing-PDF-Treatment-Reports --> 
+     <h2 id="exporting-and-printing-treatment-reports">Exporting and Printing Treatment Reports</h2> 
+     <p>GPD can export – individually, in batch, and automatically – PDF versions of the treatment printout, including the graph and the summary. It can also export treatment info (structured by the fields used) as a CSV file that you can import into Excel or other spreadsheets. Finally, graph traces can be exported in EDF format for further analysis.</p> 
+     <p>The commands for manually exporting one or more treatments are found in the <code>File→Export</code> submenu in the Treatment List window.</p> 
+     <p>The format of exported PDF treatment reports can be customized extensively using the options found on the <code>Export/Printing</code> tab in Preferences.</p> 
+     <p><img src="images/export-prefs.png" alt="Export Preferences"></p> 
+     <ul> 
+      <li><p><strong>Paper Size and Margin, PDF Font Size</strong></p> <p>Determines the page format and text size of the generated PDF.</p></li> 
+      <li><p><strong>Text Rendering</strong></p> <p>If set to <code>ASCII</code>, the text that appears in the PDF will be restricted to the ASCII character set. This may allow external programs to automatically process the summary information in the report. If set to <code>Vector</code>, the text will be rendered as vector shapes, allowing for a full range of Unicode characters and fonts, but not recognizable as text by most PDF processing software.</p></li> 
+      <li><p><strong>Save Treatment Report PDF after collection</strong></p> <p>If checked, a PDF report will be generated and saved automatically after a treatment is collected in the Monitoring screen. Use the <code>Choose Dir</code> button to select the directory where these PDF files will be saved.</p></li> 
+      <li><p><strong>Save Text Summary Along with PDF</strong></p> <p>If checked, when a PDF report is automatically generated, a text version of the summary will be saved alongside the PDF. This text version makes processing of the report easier with certain EMR software.</p></li> 
+      <li><p><strong>Print chart/report after collection</strong></p> <p>If checked, after each treatment collection, the treatment chart and/or report will be printed, respectively.</p></li> 
+      <li><p><strong>Edit PDF Header Text</strong></p> <p>By default at the top of generated PDFs is a simple summary line containing the patient's name. You can add a custom header that has access to the fields of the treatment, using the same <a href="Patient-and-Treatment-Templates.html#variable-syntax"><code>${VARIABLE}</code> syntax</a> as patient and treatment templates. For example,</p> <pre><code>Report for ${PATIENT NAME}, ID: ${PATIENT ID}
+Treatment collection date: ${TREATMENT DATE}</code></pre></li> 
+      <li><p><strong>Custom PDF Treatment Summary / Edit Summary Template</strong></p> <p>Instead of the treatment summary as sent by the Thymatron, generated PDFs may have a custom summary. The summary template has access to the field values of the treatment info. An example:</p> <pre><code>Thymatron System IV S/N: ${Thymatron System IV S/N}
+Treatment Date: ${TREATMENT DATE}
+Program Selected: ${Program Selected}
+% Energy Set:                              ${% Energy Set}
+Charge Delivered:                          ${Charge Delivered}
+Current:                                   ${Current}
+Stimulus Duration:                         ${Stimulus Duration}
+Frequency:                                 ${Frequency}
+Pulse Width:                               ${Pulse Width}
+Static Impedance:                          ${Static Impedance}
+Dynamic Impedance:                         ${Dynamic Impedance}
+EEG Endpoint:                              ${EEG Endpoint}
+EMG Endpoint:                              ${EMG Endpoint}
+Base Heart Rate:                           ${Base Heart Rate}
+Peak Heart Rate:                           ${Peak Heart Rate}
+Average Seizure Energy Index:              ${Average Seizure Energy Index}
+Postictal Suppression Index:               ${Postictal Suppression Index}
+Maximum Sustained Power:                   ${Maximum Sustained Power}
+Maximum Sustained Coherence:               ${Maximum Sustained Coherence}
+Early Ictal Amplitude:                     ${Early Ictal Amplitude}
+Midictal Amplitude:                        ${Midictal Amplitude}
+Post-Ictal Amplitude:                      ${Post-Ictal Amplitude}</code></pre></li> 
+      <li><p><strong>Align summary fields to units</strong></p> <p>If a custom summary is used as above, then for values that have units, for instance a <code>${Peak Heart Rate}</code> of <code>111 b/m</code> or <code>${Charge Delivered}</code> of <code>358.9 mC</code>, the values will be aligned so that the units line up. In this case, these two lines would appear as so:</p> <pre><code>Charge Delivered:                          358.9 mC
+Peak Heart Rate:                             111 b/m</code></pre></li> 
+      <li><p><strong>PDF Graph Scale (%) / Page break before PDF graph</strong></p> <p>You can set the size of the graphs in the PDF, as well as add a page break between the summary and graphs.</p></li> 
+      <li><p><strong>Prefer GPDT graphs when exporting to PDF</strong></p> <p>If on the <code>Monitoring/Collection</code> screen you save the monitoring data (either manually using the menu item <code>Collection→Save Monitoring Data Now</code> or automatically if <code>Autosave Monitoring Data</code> is checked), then along with the <code>DAT</code> file sent by the Thymatron, the treatment will have a<code> GPDT</code>-format monitoring data file associated with it. The <code>GPDT</code> file contains all data since collection was started, rather than just post-treatment as with the <code>DAT</code>.</p> <p>When exporting to PDF, you can use either both the <code>DAT</code> and the <code>GPDT</code> files to generate graphs, or only the <code>GPDT</code> file. Check this option to use only the <code>GPDT</code>.</p></li> 
+     </ul> 
+    </article> 
+    <div class="pfwiki-footer"> 
+     <p>© 2020 Elektrika, Inc.</p> 
+    </div> 
+   </div> 
+  </div>  
+ </body>
+</html>

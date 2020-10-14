@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en"> 
+ <head> 
+  <meta charset="utf-8"> 
+  <meta name="generator" content="pfwiki"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"> 
+  <title>Configuration and Deployment</title> 
+  <style type="text/css">
+    code{white-space: pre;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style> 
+  <link rel="stylesheet" href="GPD-wiki.css"> 
+  <link rel="stylesheet" href="pygments-highlight.css"> <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]--> 
+ </head> 
+ <body> 
+  <div class="pfwiki-wrapper"> 
+   <div id="pfwiki-sidebar-anchor" class="pfwiki-sidebar"> 
+    <div class="small-screen-jump-links"> <a href="#pfwiki-body-anchor">Jump to Top</a> 
+    </div> 
+    <h1>GPD Wiki Pages</h1> 
+    <ul> 
+     <li><a href="Home.html">Introduction (Home)</a></li> 
+     <li><a href="List-of-Guides.html">List of Guides</a></li> 
+     <li><a href="Getting-Started.html">Getting Started</a></li> 
+     <li><a href="Configuration-and-Deployment.html">Configuration and Deployment</a></li> 
+     <li><a href="Database-Fields.html">Database Fields</a></li> 
+     <li><a href="Patient-and-Treatment-Templates.html">Patient and Treatment Templates</a></li> 
+     <li><a href="Analysis.html">Analysis</a></li> 
+     <li><a href="Customizing-PDF-Treatment-Reports.html">Customizing PDF Treatment Reports</a></li> 
+     <li><a href="HL7-Functionality.html">HL7 Functionality</a></li> 
+     <li><a href="Markers.html">Markers</a></li> 
+     <li><a href="Finalizing-Treatments.html">Finalizing Treatments</a></li> 
+     <li><a href="Patient-Summary-Reports.html">Patient Summary Reports</a></li> 
+     <li><a href="Preferences.html">Preferences</a></li> 
+     <li><a href="Keyboard-Shortcuts.html">Keyboard Shortcuts</a></li> 
+     <li><a href="Additional-Thanks.html">Additional Thanks</a></li> 
+    </ul> 
+   </div> 
+   <div id="pfwiki-body-anchor" class="pfwiki-body-wrapper"> 
+    <article class="markdown-body"> 
+     <header> 
+      <div class="small-screen-jump-links"> <a href="#pfwiki-sidebar-anchor">Jump to Sidebar</a> 
+      </div> 
+      <h1 class="title">Configuration and Deployment</h1> 
+     </header> <!-- Configuration-and-Deployment --> 
+     <h3 id="on-this-page">On this Page</h3> 
+     <ul> 
+      <li><a href="#single-user-usage">Single-User Usage</a> 
+       <ul> 
+        <li><a href="#portable-mode">Portable Mode</a></li> 
+       </ul></li> 
+      <li><a href="#multiple-user-deployment">Multiple-User Deployment</a></li> 
+      <li><a href="#updating">Updating</a></li> 
+      <li><a href="#sql-database-configuration">SQL Database Configuration</a> 
+       <ul> 
+        <li><a href="#commentary-on-gpds-sql-code">Commentary on GPD's SQL Code</a></li> 
+       </ul></li> 
+      <li><a href="#customizing-the-ui">Customizing the UI</a></li> 
+     </ul> 
+     <h2 id="single-user-usage">Single-User Usage</h2> 
+     <p>The user can simply unzip the GPD distribution ZIP and run <code>GPD.exe</code>. In the program's default configuration, GPD stores data and preferences in the user's Application Data (aka <code>AppData</code>) folder.</p> 
+     <h3 id="portable-mode">Portable Mode</h3> 
+     <p>GPD can also run in "portable mode", in which it stores its data and configuration in a subdirectory of the GPD program folder. In this way, both the program and data can be moved or copied simply by moving or copying the GPD folder, for instance when keeping GPD on a memory stick.</p> 
+     <p>To enable portable mode, edit the <code>portable-mode.txt</code> file in the program folder, and change the last line so that it reads <code>portable-mode = true</code>. When you run GPD, it will read the file and start in portable mode.</p> 
+     <p>Note that data saved when running GPD in portable mode will not be available when running GPD in normal mode, and vice-versa – therefore, consider which method you prefer before running the program the first time and stick with it.</p> 
+     <h2 id="multiple-user-deployment">Multiple-User Deployment</h2> 
+     <p>To install GPD on a shared drive and have it be made available to multiple users, whether by file sharing or terminal services, the administrator should perform a few preliminary steps:</p> 
+     <ol type="1"> 
+      <li><p>Unzip the GPD distribution into a shared drive. The administrator should have write permission to this location when he runs GPD for the first time; if necessary, right-click <code>GPD.exe</code> and "Run as administrator" in step 2 below.</p></li> 
+      <li><p>Run <code>GPD.exe</code>, enter the appropriate license information, and configure the program by adjusting preferences and templates.</p></li> 
+      <li><p>From the Preferences windows, select the <code>File</code> Menu→<code>Export Preferences</code> command, and save the resulting ZIP file as <code>initial-prefs.zip</code> in the <code>config</code> subfolder of the GPD program directory (in the same folder as <code>gpd.config</code>). By doing that, when a user runs GPD for the first time, his personal preferences and templates will take the value of those just exported.</p></li> 
+      <li><p>If necessary, edit <code>gpd.config</code> to adjust users' configuration and data directories. By default, both configuration and treatment data are stored in various folders under <code>${appdata}/GPD</code> (where <code>${appdata}</code> represents the value of the user's <code>APPDATA</code> environment variable). If the administrator would prefer that each user store data somewhere else, he can edit the appropriate lines in <code>gpd.config</code>.</p> <p>Any environment variable can be used in the paths by enclosing it in curly brackets <code>${}</code>. For instance, you can store each user’s preferences in a separate directory on a shared drive by using a path like:</p> <p>  <code>user-prefs = W:/GPD_Data/${USERNAME}/user/user.prefs</code></p> <p>and GPD will expand <code>${USERNAME}</code> into the value of the<code> %USERNAME%</code> Windows environment variable.</p></li> 
+      <li><p>Edit <code>database.config</code> and <code>gui-config.xml</code> to make any changes desired for your environment (more info on these files given in the following sections).</p></li> 
+      <li><p>If you have configured GPD such that all users share a single database, you can allow users to quickly filter the patient list to see other users' patients by setting <code>allow-quick-user-patient-switching = true</code> in <code>gpd.config</code>.</p></li> 
+      <li><p>Make the GPD program folder available to users, read-only if desired.</p></li> 
+     </ol> 
+     <p>If you've upgraded through a number of GPD versions, your <code>gpd.config</code> file may not have all the latest properties or comments; however, in the <code>reference</code> subdirectory of your <code>config</code> directory, you'll find the latest revisions of all the default configuration files.</p> 
+     <h2 id="updating">Updating</h2> 
+     <p>The ZIP distribution may be unpacked directly over an existing installation directory – no configuration information will be lost.</p> 
+     <p>Alternatively, you can update GPD in-place by viewing the About dialog (<code>Help</code> Menu→<code>About</code>…) and clicking <code>Check for Update</code>. If an update is found, you can choose to download and install it automatically.</p> 
+     <p>If you don’t have write access to the GPD directory, you can request that the updater run with Administrator privileges by checking the “Run updater with elevated privileges (UAC)” in the Preferences→General tab.</p> 
+     <h2 id="sql-database-configuration">SQL Database Configuration</h2> 
+     <p><code>database.config</code>, and the various files referenced from it, allow you to integrate GPD into your own SQL database system, if desired. In its default configuration, GPD will store textual and numeric information in its own local database, and binary data – files associated with patients or treatments, or data collected from devices – in the filesystem (as configured by the <code>files-dir</code> property in <code>gpd.config</code>). By setting</p> 
+     <pre><code>store-contents = true</code></pre> 
+     <p>in <code>database.config</code>, GPD will also store the contents of all binary files in the SQL DB, and use the filesystem only as a cache.</p> 
+     <blockquote> 
+      <p>Setting <code>store-contents=true</code> will also disable GPD's built-in database backup, normally controlled by the <code>num-backups</code> <code>gpd.config</code> property, since when the DB holds file contents it can grow quite large.</p> 
+     </blockquote> 
+     <p>This is most useful if, rather than using GPD's default embedded DB, you configure GPD to interface with an existing DB server. As for how to do that...read on.</p> 
+     <ul> 
+      <li><em>Update</em>: From version 5.5.6 onward, GPD has built-in support for MS SQL Server. See the comments in <code>database.config</code> for information on how to configure GPD to use SQL Server.</li> 
+     </ul> 
+     <p>In the <code>dbconf</code> subdirectory of the GPD program folder, you'll find two main points of entry: the first is in the <code>sql</code> directory: these are the scripts that create the DB schema, define SQL stored procedures, and check that everything is in place each time the program is run. When GPD initializes its database connection, it will execute the script indicated by the <code>check-db-setup-script</code> property in <code>database.config</code>. That script in turn references the others that you find in the same folder.</p> 
+     <p>The second point of entry is the <code>hsqldb-mybatis-gpd.properties</code> and <code>hsqldb-mybatis-gpd-config.xml</code> files in the <code>dbconf\resources\com\elektrika\gpd \mybatis</code> folder (and referenced by the <code>mybatis-properties-resource</code> and <code>mybatis-config-resource</code> settings in database.config). The former specifies the JDBC driver, connection URL, username, and password that will be used to make database connections, and the second configures the lightweight ORM (MyBatis) that GPD uses to interface with an SQL DB.</p> 
+     <p>The SQL database that is shipped with GPD is HSQLDB, and the dialect of SQL used to write the default SQL scripts and mapper statements is very close to standard ANSI SQL.</p> 
+     <p>And so, to adapt GPD to use your particular SQL DB:</p> 
+     <ol type="1"> 
+      <li><p>Put the <code>.jar</code> containing a JDBC driver for your SQL database into the <code>lib</code> directory of the GPD program folder.</p> 
+       <blockquote> 
+        <p>You can find a ZIP containing .jar for MS SQL that is compatible with GPD at <a href="https://app.box.com/shared/static/al5zkkbcmkgb8fwihvmn4oeju54ygejr.zip">this link</a>. If you use integrated authentication, rather than a username and password, you'll also need to install the two DLLs somewhere on your system path</p> 
+       </blockquote></li> 
+      <li><p>Make a new directory in <code>sql</code> directory, next to the <code>hsqldb</code> folder (let's call it <code>MSSQL</code> for the purpose of this example), and copy all the <code>.sql</code> files from <code>hsqldb</code> into <code>MSSQL</code>. You will not need to modify any of the programming commands (i.e. those that start with a <code>*</code> or <code>\</code>), but only the SQL statements themselves.</p></li> 
+      <li><p>Change <code>database.config</code> to point to your new script:</p> <p><code>check-db-setup-script = dbconf/MSSQL/check-db-setup.sql</code></p></li> 
+      <li><p>Make copies of the .<em>xml</em> and .<em>properties</em> files in <code>dbconf\resources\com\elektrika\gpd\mybatis</code> and give them appropriate names. For instance</p> <pre><code> hsqldb-gpd-mapper.xml          →  MSSQL-gpd-mapper.xml 
+ hsqldb-utility-mapper.xml      →  MSSQL-utility-mapper.xml 
+ hsqldb-mybatis-gpd.properties  →  MSSQL-gpd.properties 
+ hsqldb-mybatis-gpd-config.xml  →  MSSQL-gpd-config.xml </code></pre></li> 
+     </ol> 
+     <p>It's important to use new names for your modifications so that the files are not overwritten when GPD is updated to a new version. (And we're leaving them in the same directory so that we don't need to change the "namespace" settings of the mappers).</p> 
+     <ol start="5" type="1"> 
+      <li><p>Adjust three lines in <code>MSSQL-gpd-config.xml</code> to refer to the other files you created (the first is a <code>&lt;properties/&gt;</code> element near the top of the file, and the other two are in <code>&lt;mapper/&gt;</code> elements near the bottom).</p></li> 
+      <li><p>Edit the JDBC properties in <code>MSSQL-gpd.properties</code> to match the database and authentication parameters you want GPD to use. You probably will use a literal connection string as the <code>urltemplate</code> property, so no need to worry about the <code>${database-dir}</code> and <code>${dbname}</code> variables.</p></li> 
+      <li><p>Edit the SQL code in <code>MSSQL-gpd-mapper.xml</code> and <code>MSSQL-utility-mapper.xml</code> to conform to the dialect used in your SQL system.</p></li> 
+      <li><p>Change <code>database.config</code> to point to your new configuration:</p> <p><code>mybatis-config-resource = com/elektrika/gpd/mybatis/MSSQL-gpd-config.xml</code></p></li> 
+     </ol> 
+     <h3 id="commentary-on-gpds-sql-code">Commentary on GPD's SQL Code</h3> 
+     <p>Most of the SQL used in GPD – both in the setup <code>.sql</code> scripts and the mapper XML files – is quite simple. The fragments enclosed in <code>#{}</code> are just variable substitutions that will be filled in at runtime, and can be left as-is, unless you need to fundamentally change the database schema. The only areas in the SQL code that may cause some difficulty are the stored procedures found in <code>define-routines.sql</code> and the <code>MERGE</code> statements in <code>hsqldb-gpd-mapper.xml</code> relating to storing file contents.</p> 
+     <p>The routines are written in ISO standard <a href="https://en.wikipedia.org/wiki/SQL/PSM">SQL/PSM</a>, but most databases do not support the standard directly, instead using their own individual dialect, like Oracle's PL/SQL or MS SQL Server's T-SQL. Most of the procedures should be straightforward to translate, though do take note of the various <code>GET_PATIENT</code> and <code>GET_TREATMENT</code> procedures, which use database cursors to return multiple result sets.</p> 
+     <p>In case your database doesn't support <code>MERGE</code>, there are two example procedures given at the end of <code>define-routines.sql</code> that show how the <code>MERGE</code> mappings could be implemented as stored procedures.</p> 
+     <p>If you would like to integrate support for a new database into GPD, contact me at <a href="mailto:GPD@elektrika-inc.com"></a><a href="mailto:GPD@elektrika-inc.com">GPD@elektrika-inc.com</a> and we can collaborate to make it work.</p> 
+     <h2 id="customizing-the-ui">Customizing the UI</h2> 
+     <p>In gpd.config, the property <code>gui-config</code> indicates an XML file, by default <code>gui-config.xml</code> that allows you to customize certain aspects of the user interface – currently, the button bars on both the patient and treatment list screens.</p> 
+     <p>The default configuration XML is given below, along with the two resulting button bars for the treatment list and patient list, respectively. The <code>&lt;label&gt;</code> element is optional, and each <code>&lt;button-bar&gt;</code> can have as many <code>&lt;button&gt;</code> elements as you would like, though the screen size of the window imposes a practical limit. The <code>text</code> attribute of each <code>&lt;button&gt;</code> specifies what text appears on the button, and the <code>action</code> attribute corresponds to the menu item whose action you want the button to perform. The <code>action</code> can be upper- or lowercase, and you can leave out the ellipses "..." for menu items (like <code>Patient Files...</code> in the Patient menu) that have them.</p> 
+     <p>Making a custom button bar is useful for putting commonly used commands directly in front of the user, and can also provide for using your own clearer terminology for certain actions – for instance, you could create a button named "Transmit to Server" that would invoke the "<code>SEND&nbsp;TREATMENT&nbsp;VIA MLLP</code>" action.</p> 
+     <p>Default <code>gui-config.xml</code>:</p> 
+     <div class="sourceCode" id="cb3">
+      <pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">&lt;GPD&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>  <span class="kw">&lt;treatment-list&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>    <span class="kw">&lt;button-bar&gt;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>      <span class="kw">&lt;label</span><span class="ot"> text=</span><span class="st">"TREATMENT:"</span> <span class="kw">/&gt;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a>      <span class="kw">&lt;button</span><span class="ot"> text=</span><span class="st">"COLLECT NEW"</span><span class="ot"> action=</span><span class="st">"COLLECT NEW TREATMENT"</span> <span class="kw">/&gt;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a>      <span class="kw">&lt;button</span><span class="ot"> text=</span><span class="st">"View Graph"</span><span class="ot"> action=</span><span class="st">"VIEW GRAPH"</span> <span class="kw">/&gt;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a>      <span class="kw">&lt;button</span><span class="ot"> text=</span><span class="st">"Delete"</span><span class="ot"> action=</span><span class="st">"DELETE TREATMENT"</span> <span class="kw">/&gt;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true"></a>      <span class="kw">&lt;button</span><span class="ot"> text=</span><span class="st">"Change Date"</span><span class="ot"> action=</span><span class="st">"CHANGE DATE"</span> <span class="kw">/&gt;</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true"></a>      <span class="kw">&lt;button</span><span class="ot"> text=</span><span class="st">"Files"</span><span class="ot"> action=</span><span class="st">"ASSOCIATED FILES"</span> <span class="kw">/&gt;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true"></a>      <span class="kw">&lt;button</span><span class="ot"> text=</span><span class="st">"Compare"</span><span class="ot"> action=</span><span class="st">"COMPARE TREATMENTS"</span> <span class="kw">/&gt;</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true"></a>    <span class="kw">&lt;/button-bar&gt;</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true"></a>  <span class="kw">&lt;/treatment-list&gt;</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true"></a>  <span class="kw">&lt;patient-list&gt;</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true"></a>    <span class="kw">&lt;button-bar&gt;</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true"></a>      <span class="kw">&lt;label</span><span class="ot"> text=</span><span class="st">"PATIENT:"</span> <span class="kw">/&gt;</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true"></a>      <span class="kw">&lt;button</span><span class="ot"> text=</span><span class="st">"New"</span><span class="ot"> action=</span><span class="st">"NEW PATIENT"</span> <span class="kw">/&gt;</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true"></a>      <span class="kw">&lt;button</span><span class="ot"> text=</span><span class="st">"Delete"</span><span class="ot"> action=</span><span class="st">"DELETE PATIENT"</span> <span class="kw">/&gt;</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true"></a>      <span class="kw">&lt;button</span><span class="ot"> text=</span><span class="st">"View Treatments"</span><span class="ot"> action=</span><span class="st">"VIEW TREATMENTS"</span> <span class="kw">/&gt;</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true"></a>      <span class="kw">&lt;button</span><span class="ot"> text=</span><span class="st">"Collect New Treatment"</span><span class="ot"> action=</span><span class="st">"COLLECT NEW TREATMENT"</span> <span class="kw">/&gt;</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true"></a>      <span class="kw">&lt;button</span><span class="ot"> text=</span><span class="st">"Files"</span><span class="ot"> action=</span><span class="st">"PATIENT FILES"</span> <span class="kw">/&gt;</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true"></a>    <span class="kw">&lt;/button-bar&gt;</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true"></a>  <span class="kw">&lt;/patient-list&gt;</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true"></a><span class="kw">&lt;/GPD&gt;</span></span></code></pre>
+     </div> 
+     <p>Resulting button bars:</p> 
+     <p> <img src="images/treatment-button-bar.png" alt="Treatment List Button Bar"></p> 
+     <p> <img src="images/patient-button-bar.png" alt="Patient List Button Bar"></p> 
+    </article> 
+    <div class="pfwiki-footer"> 
+     <p>© 2020 Elektrika, Inc.</p> 
+    </div> 
+   </div> 
+  </div>  
+ </body>
+</html>

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en"> 
+ <head> 
+  <meta charset="utf-8"> 
+  <meta name="generator" content="pfwiki"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"> 
+  <title>Markers</title> 
+  <style type="text/css">
+    code{white-space: pre;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style> 
+  <link rel="stylesheet" href="GPD-wiki.css"> 
+  <link rel="stylesheet" href="pygments-highlight.css"> <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]--> 
+ </head> 
+ <body> 
+  <div class="pfwiki-wrapper"> 
+   <div id="pfwiki-sidebar-anchor" class="pfwiki-sidebar"> 
+    <div class="small-screen-jump-links"> <a href="#pfwiki-body-anchor">Jump to Top</a> 
+    </div> 
+    <h1>GPD Wiki Pages</h1> 
+    <ul> 
+     <li><a href="Home.html">Introduction (Home)</a></li> 
+     <li><a href="List-of-Guides.html">List of Guides</a></li> 
+     <li><a href="Getting-Started.html">Getting Started</a></li> 
+     <li><a href="Configuration-and-Deployment.html">Configuration and Deployment</a></li> 
+     <li><a href="Database-Fields.html">Database Fields</a></li> 
+     <li><a href="Patient-and-Treatment-Templates.html">Patient and Treatment Templates</a></li> 
+     <li><a href="Analysis.html">Analysis</a></li> 
+     <li><a href="Customizing-PDF-Treatment-Reports.html">Customizing PDF Treatment Reports</a></li> 
+     <li><a href="HL7-Functionality.html">HL7 Functionality</a></li> 
+     <li><a href="Markers.html">Markers</a></li> 
+     <li><a href="Finalizing-Treatments.html">Finalizing Treatments</a></li> 
+     <li><a href="Patient-Summary-Reports.html">Patient Summary Reports</a></li> 
+     <li><a href="Preferences.html">Preferences</a></li> 
+     <li><a href="Keyboard-Shortcuts.html">Keyboard Shortcuts</a></li> 
+     <li><a href="Additional-Thanks.html">Additional Thanks</a></li> 
+    </ul> 
+   </div> 
+   <div id="pfwiki-body-anchor" class="pfwiki-body-wrapper"> 
+    <article class="markdown-body"> 
+     <header> 
+      <div class="small-screen-jump-links"> <a href="#pfwiki-sidebar-anchor">Jump to Sidebar</a> 
+      </div> 
+      <h1 class="title">Markers</h1> 
+     </header> <!-- Markers --> 
+     <p>GPD supports inserting <em>markers</em> in treatment graphs, both during collection and when reviewing a graph. A marker is a user-defined indicator that something has occurred at a certain point during data collection, for instance that treatment was administered, the seizure ended, or an artifact was present.</p> 
+     <blockquote> 
+      <p>Note: To use markers, you'll need to set both Treatment Collection and Treatment Viewer to <code>GPD</code> in Preferences, and ensure that in the Monitoring Screen, the menu option <code>Collection→Monitoring Data Format→GPDT</code> is selected.</p> 
+     </blockquote> 
+     <p><img src="images/marker.png" alt="Markers"><br> <em>In the above screenshot, you see a "Patient Disconnected" marker just after the 6s line.</em></p> 
+     <h2 id="markers-during-collection">Markers During Collection</h2> 
+     <p>From the <code>Markers</code> menu of the Monitoring / Collection window, you can define up to nine markers that can be inserted at any time during collection.</p> 
+     <p><img src="images/edit-markers.png" alt="Edit Markers"></p> 
+     <p>To insert a given marker, simply press the appropriate number key on the keyboard (for instance, pressing <code>7</code> will insert the 7th marker).</p> 
+     <h2 id="markers-in-the-review-screen">Markers in the Review Screen</h2> 
+     <p>On the GPD Review Treatment screen, you can right click any point in the graph to insert or delete a marker. The text for these markers do not have to be one of the nine pre-defined types, but can be anything you type. Clicking one of the preset buttons will load the text and color for that preset.</p> 
+     <p>Note that you can only use markers when viewing a <code>GPDT</code> file – the <code>DAT</code> format does not support markers.</p> 
+    </article> 
+    <div class="pfwiki-footer"> 
+     <p>© 2020 Elektrika, Inc.</p> 
+    </div> 
+   </div> 
+  </div>  
+ </body>
+</html>

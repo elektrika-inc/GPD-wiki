@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en"> 
+ <head> 
+  <meta charset="utf-8"> 
+  <meta name="generator" content="pfwiki"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"> 
+  <title>Patient Summary Reports</title> 
+  <style type="text/css">
+    code{white-space: pre;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style> 
+  <link rel="stylesheet" href="GPD-wiki.css"> 
+  <link rel="stylesheet" href="pygments-highlight.css"> <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]--> 
+ </head> 
+ <body> 
+  <div class="pfwiki-wrapper"> 
+   <div id="pfwiki-sidebar-anchor" class="pfwiki-sidebar"> 
+    <div class="small-screen-jump-links"> <a href="#pfwiki-body-anchor">Jump to Top</a> 
+    </div> 
+    <h1>GPD Wiki Pages</h1> 
+    <ul> 
+     <li><a href="Home.html">Introduction (Home)</a></li> 
+     <li><a href="List-of-Guides.html">List of Guides</a></li> 
+     <li><a href="Getting-Started.html">Getting Started</a></li> 
+     <li><a href="Configuration-and-Deployment.html">Configuration and Deployment</a></li> 
+     <li><a href="Database-Fields.html">Database Fields</a></li> 
+     <li><a href="Patient-and-Treatment-Templates.html">Patient and Treatment Templates</a></li> 
+     <li><a href="Analysis.html">Analysis</a></li> 
+     <li><a href="Customizing-PDF-Treatment-Reports.html">Customizing PDF Treatment Reports</a></li> 
+     <li><a href="HL7-Functionality.html">HL7 Functionality</a></li> 
+     <li><a href="Markers.html">Markers</a></li> 
+     <li><a href="Finalizing-Treatments.html">Finalizing Treatments</a></li> 
+     <li><a href="Patient-Summary-Reports.html">Patient Summary Reports</a></li> 
+     <li><a href="Preferences.html">Preferences</a></li> 
+     <li><a href="Keyboard-Shortcuts.html">Keyboard Shortcuts</a></li> 
+     <li><a href="Additional-Thanks.html">Additional Thanks</a></li> 
+    </ul> 
+   </div> 
+   <div id="pfwiki-body-anchor" class="pfwiki-body-wrapper"> 
+    <article class="markdown-body"> 
+     <header> 
+      <div class="small-screen-jump-links"> <a href="#pfwiki-sidebar-anchor">Jump to Sidebar</a> 
+      </div> 
+      <h1 class="title">Patient Summary Reports</h1> 
+     </header> <!-- Patient Summary Reports --> 
+     <h3 id="on-this-page">On this Page</h3> 
+     <ul> 
+      <li><a href="#overview">Overview</a></li> 
+      <li><a href="#data-model">Data Model</a></li> 
+      <li><a href="#report-template">Report Template</a></li> 
+     </ul> 
+     <h2 id="overview">Overview</h2> 
+     <p>This is a somewhat advanced feature that allows a user to generate a report that contains data from all the user's patient and treatment information. The basic idea is that GPD builds up a hierarchical data model that contains a sequence of all the user's patients, and for each patient, a sequence of that patient's treatments. This model is fed to a template that can output a report in any textual format (principally plain-text, XML, or HTML).</p> 
+     <h2 id="data-model">Data Model</h2> 
+     <p>The model is based on <em>hashes</em>, that map a key to a value. The hierarchy of hashes is presented in this diagram:</p> 
+     <p><img src="images/patient-report-data-model.png" alt="Patient Report Data Model"></p> 
+     <p>When you invoke the command to generate a patient summary report (in the Patient List, <code>File </code>menu→<code>Generate Patient Summary Report…</code>), you will be presented with a dialog to choose the date range for the report:</p> 
+     <p><img src="images/select-date-range.png" alt="Select Date Range Dialog"></p> 
+     <p>Only those treatments that occurred within the chosen date range will be considered when building the data model, and it is the start date and end date entered here that appear in the <code>startDate</code> and <code>endDate</code> keys of the root hash. The <code>totalTreatments</code> key contains the total number of treatments for all patients in the date range, and in the <code>treatments</code> key is a sequence of patient hashes.</p> 
+     <p>Each of the patient hashes has all of the fields found in the patient info, for instance <code>PATIENT ID</code>, <code>DOB</code>, <code>REFERRING PHYSICIAN</code>, etc., as well as two other special keys: <code>numTreatments</code>, which contains the number of treatments for that patient in the chosen date range; and <code>treatments</code>, which is a sequence of treatment hashes.</p> 
+     <p>Each treatment hash has all of the fields found in the treatment info – <code>% ENERGY SET</code>, <code>EEG ENDPOINT</code>, etc. – as well as <code>TREATMENT DATE</code>.</p> 
+     <h2 id="report-template">Report Template</h2> 
+     <p>In the Preferences window <code>Templates</code> tab is a button to edit the <code>Patient Summary</code> template. The template is in <a href="https://freemarker.apache.org/docs/index.html">FreeMarker</a> FTL format – FreeMarker is a powerful but complex templating engine that can be massaged into doing almost anything you need, but explaining its usage is far outside the scope of this manual. I'll give a relatively straightforward example below, and for any particular reporting needs you may have, please contact us at <a href="mailto:GPD@elektrika-inc.com">GPD@elektrika-inc.com</a>.</p> 
+     <p>In reading the below template, note that variables are referenced using the same <code>${VARIABLE}</code> syntax as in GPD patient and treatment templates, and that keys of the patient and treatment hashes are referenced as <code>${patient["FIELD"]}</code> and <code>${treatment["FIELD"]}</code> respectively. Alternatively, if the <code>FIELD </code>name doesn't contain any spaces or punctuation, you can reference it as <code>${patient.FIELD}</code> and <code>${treatment.FIELD}</code> (as is done in the example below with <code>${patient.numTreatments}</code>).</p> 
+     <p>The template itself:</p> 
+     <pre><code>&lt;#ftl output_format="plainText"&gt;
+
+== Patient Treatment Summary (${startDate} to ${endDate}) ==
+
+${totalTreatments} treatments were performed.
+
+&lt;#list patients as patient&gt;
+Patient ID: ${patient["PATIENT ID"]!"(no ID)"} [${patient.numTreatments} treatments]
+  Dates/Times:
+    &lt;#list patient.treatments as treatment&gt;
+    ${treatment["TREATMENT DATE"]}
+    &lt;/#list&gt;
+&lt;#sep&gt;
+
+&lt;/#sep&gt;
+&lt;/#list&gt;</code></pre> 
+     <p>The output of this template when run against patient data might be</p> 
+     <pre><code>== Patient Treatment Summary (2020-05-25 to 2020-06-30) ==
+
+7 treatments were performed.
+
+Patient ID: CARM31F
+[4 treatments]
+  Dates/Times:
+    2020-06-01 11:15
+    2020-06-03 14:23
+    2020-06-05 09:32
+    2020-06-06 10:24
+
+Patient ID: MILJ55M
+[3 treatments]
+  Dates/Times:
+    2020-05-29 14:49
+    2020-05-30 13:11
+    2020-06-02 10:54</code></pre> 
+    </article> 
+    <div class="pfwiki-footer"> 
+     <p>© 2020 Elektrika, Inc.</p> 
+    </div> 
+   </div> 
+  </div>  
+ </body>
+</html>

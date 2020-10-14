@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en"> 
+ <head> 
+  <meta charset="utf-8"> 
+  <meta name="generator" content="pfwiki"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"> 
+  <title>Patient and Treatment Templates</title> 
+  <style type="text/css">
+    code{white-space: pre;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style> 
+  <link rel="stylesheet" href="GPD-wiki.css"> 
+  <link rel="stylesheet" href="pygments-highlight.css"> <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]--> 
+ </head> 
+ <body> 
+  <div class="pfwiki-wrapper"> 
+   <div id="pfwiki-sidebar-anchor" class="pfwiki-sidebar"> 
+    <div class="small-screen-jump-links"> <a href="#pfwiki-body-anchor">Jump to Top</a> 
+    </div> 
+    <h1>GPD Wiki Pages</h1> 
+    <ul> 
+     <li><a href="Home.html">Introduction (Home)</a></li> 
+     <li><a href="List-of-Guides.html">List of Guides</a></li> 
+     <li><a href="Getting-Started.html">Getting Started</a></li> 
+     <li><a href="Configuration-and-Deployment.html">Configuration and Deployment</a></li> 
+     <li><a href="Database-Fields.html">Database Fields</a></li> 
+     <li><a href="Patient-and-Treatment-Templates.html">Patient and Treatment Templates</a></li> 
+     <li><a href="Analysis.html">Analysis</a></li> 
+     <li><a href="Customizing-PDF-Treatment-Reports.html">Customizing PDF Treatment Reports</a></li> 
+     <li><a href="HL7-Functionality.html">HL7 Functionality</a></li> 
+     <li><a href="Markers.html">Markers</a></li> 
+     <li><a href="Finalizing-Treatments.html">Finalizing Treatments</a></li> 
+     <li><a href="Patient-Summary-Reports.html">Patient Summary Reports</a></li> 
+     <li><a href="Preferences.html">Preferences</a></li> 
+     <li><a href="Keyboard-Shortcuts.html">Keyboard Shortcuts</a></li> 
+     <li><a href="Additional-Thanks.html">Additional Thanks</a></li> 
+    </ul> 
+   </div> 
+   <div id="pfwiki-body-anchor" class="pfwiki-body-wrapper"> 
+    <article class="markdown-body"> 
+     <header> 
+      <div class="small-screen-jump-links"> <a href="#pfwiki-sidebar-anchor">Jump to Sidebar</a> 
+      </div> 
+      <h1 class="title">Patient and Treatment Templates</h1> 
+     </header> <!-- Patient and Treatment Templates --> 
+     <h3 id="on-this-page">On this Page</h3> 
+     <ul> 
+      <li><a href="#templates">Templates</a></li> 
+      <li><a href="#template-file-format">Template File Format</a></li> 
+      <li><a href="#additional-variables">Additional Variables</a></li> 
+      <li><a href="#inserting-template-fields">Inserting Template Fields</a></li> 
+      <li><a href="#template-settings">Template Settings</a></li> 
+     </ul> 
+     <h2 id="templates">Templates</h2> 
+     <p>There are certain fields that you may need to insert into the info areas for multiple patients or treatments, such as <code>Patient ID</code>, <code>Sex</code>, treatment <code>Anesthesia</code>, etc. Rather than enter the information manually each time, you can use GPD's flexible <em>template</em> mechanism to define a common set of fields that can be inserted efficiently when you're editing patient or treatment info.</p> 
+     <h2 id="template-file-format">Template File Format</h2> 
+     <p>Patients and Treatments each has its own template file. These can be viewed or edited on the <code>Templates </code>tab of the Preferences screen.</p> 
+     <p>The template files are formatted in the <a href="Database-Fields.html#field-parsing">standard field syntax</a>, with a few additional properties. We'll start with an example patient template, and then explain each property.</p> 
+     <pre><code>Patient ID:
+Age:
+Sex: M|F|O|Unspecified
+Footer: Proprietary Information of Healthy Medical Center
+        Do not distribute without consent.</code></pre> 
+     <p>in this patient template, there are two bits of special functionality. In the value for the <code>Sex</code> field, there are multiple choices separated by a vertical bar <code>|</code>. When you insert this field (as will be explained below), you'll be prompted to select one of the choices. The <code>Footer</code> field is handled specially: if it is inserted, the value of the field – here two lines of text (note that any lines after the first have to be indented) – will be placed at the bottom of the info area, after any information already in it.</p> 
+     <p>Here is an example treatment template:</p> 
+     <pre><code>Electrode Placement: Bifrontal|Unilateral (R)|Unilateral (L)
+Patient: ${PATIENT ID:}
+Anesthesia: ${PREVIOUS.ANESTHESIA:(none)}</code></pre> 
+     <h4 id="variable-syntax">Variable-Syntax</h4> 
+     <p>There are a few additional points to note here. First, you see <em>variable</em> syntax: the name of a different field enclosed in <code>${ }</code> with a default value given after the colon, i.e. <code>${VARIABLE:&amp;lt;default value&gt;}</code>. When you insert a template field, that variable will be replaced by the value of the referenced field, or the default value if the field doesn't exist. In this case, if you insert the Patient field into a treatment text area, <code>${PATIENT ID:}</code> will be replaced by the Patient ID of the Patient that the treatment belongs to (in Treatment templates, you can refer to fields of the owning Patient), or else a blank (you will be prompted to enter a value). If the name of a variable begins with <code>PREVIOUS.</code> (note the period), then the value will be taken from the previous treatment or patient. In this case, <code>${PREVIOUS.ANESTHESIA:(none)}</code> will be replaced by the Anesthesia value from the last treatment, or <code>(none)</code> if no previous anesthesia is available. If you reference a <code>${VARIABLE}</code> and don't provide a default, then if that variable isn't found a blank will be used as the default.</p> 
+     <p>It is generally a good idea to keep the field names in the Patient and Treatment templates distinct from each other, so that there's no confusion about the source of a field's value.</p> 
+     <h2 id="additional-variables">Additional Variables</h2> 
+     <p><strong><code>PATIENT COUNTER</code></strong></p> 
+     <p>A number that is unique to every patient in the database, and can be accessed in Patient templates. For instance,</p> 
+     <p><code>Unique Patient ID: Patient_${PATIENT COUNTER}</code></p> 
+     <p>will expand to <code>Patient_4</code>, <code>Patient_22</code>, etc.</p> 
+     <hr> 
+     <p><strong><code>PATIENT NAME</code></strong></p> 
+     <p>In both Patient and Treatment templates, this is set to the patient's name.</p> 
+     <hr> 
+     <p><strong><code>TREATMENT COUNTER</code></strong></p> 
+     <p>A number that is unique to every treatment in the database, and can be accessed in Treatment templates. Its usage is parallel to <code>PATIENT COUNTER</code> above.</p> 
+     <hr> 
+     <p><strong><code>TREATMENT DATE</code></strong></p> 
+     <p>In Treatment templates, set to the treatment's date/time.</p> 
+     <hr> 
+     <p><strong><code>PATIENT TREATMENT NO</code></strong></p> 
+     <p>In Treatment templates, this indicates the position of the current treatment among the patient's treatment list. That is, the oldest treatment has a <code>PATIENT&nbsp;TREATMENT&nbsp;NO</code> of 1, the second-oldest treatment is 2, etc.</p> 
+     <hr> 
+     <h2 id="inserting-template-fields">Inserting Template Fields</h2> 
+     <p>There are three commands for using template fields while editing patient or treatment info that can be accessed from the <code>Template</code> menu, or with keyboard shortcuts.</p> 
+     <p><img src="images/field-choices.png" alt="Field Choices"></p> 
+     <p><strong>Insert Template Field</strong> (<code>Ctrl+T</code>)<br> A dialog of all the fields not in the current info area will appear. Select a field and hit enter or click the Insert button, and you'll be prompted for a value if necessary. Note that even for multiple-choice values, you can type a value not in the list, to insert it.</p> 
+     <p><strong>Complete Current Field</strong> (<code>Ctrl+L</code>)<br> If your cursor is on a line that has a field name but no value, then the value will be inserted from the template, prompting you if necessary.</p> 
+     <p><strong>Insert Missing Fields</strong> (<code>Ctrl+M</code>)<br> Any template fields not in the current info area will be appended, prompting you for values if necessary. This is a good command to set up a new patient or treatment with all your required fields.</p> 
+     <h2 id="template-settings">Template Settings</h2> 
+     <p>The settings for patient and treatment templates are found in the <code>Templates</code> tab of the program <a href="Preferences.html">Preferences</a> screen.</p> 
+     <p><img src="images/template-prefs.png" alt="Template Preferences"></p> 
+     <p>Here you can edit the templates for patients, treatments, and patient summary reports, as well as set the following options:</p> 
+     <h4 id="insert-missing-template-fields-in-new-treatments-and-patients">Insert Missing Template Fields in new Treatments and Patients</h4> 
+     <p>When you create a new patient or collect a new treatment, the program will automatically insert any missing fields from the respective template.</p> 
+     <h4 id="prompt-for-value-when-inserting-blank-template-fields">Prompt for value when inserting blank template fields</h4> 
+     <p>If your template contains a line that is a blank field name, for example</p> 
+     <p><code>Patient ID:</code></p> 
+     <p>then GPD will pop up a dialog prompting you to enter a value for that field.</p> 
+     <hr> 
+     <p>By selecting the above two options, you can automatically populate a new patient or treatment with a standard set of data.</p> 
+    </article> 
+    <div class="pfwiki-footer"> 
+     <p>© 2020 Elektrika, Inc.</p> 
+    </div> 
+   </div> 
+  </div>  
+ </body>
+</html>

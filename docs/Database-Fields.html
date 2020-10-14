@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en"> 
+ <head> 
+  <meta charset="utf-8"> 
+  <meta name="generator" content="pfwiki"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"> 
+  <title>Database Fields</title> 
+  <style type="text/css">
+    code{white-space: pre;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style> 
+  <link rel="stylesheet" href="GPD-wiki.css"> 
+  <link rel="stylesheet" href="pygments-highlight.css"> <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]--> 
+ </head> 
+ <body> 
+  <div class="pfwiki-wrapper"> 
+   <div id="pfwiki-sidebar-anchor" class="pfwiki-sidebar"> 
+    <div class="small-screen-jump-links"> <a href="#pfwiki-body-anchor">Jump to Top</a> 
+    </div> 
+    <h1>GPD Wiki Pages</h1> 
+    <ul> 
+     <li><a href="Home.html">Introduction (Home)</a></li> 
+     <li><a href="List-of-Guides.html">List of Guides</a></li> 
+     <li><a href="Getting-Started.html">Getting Started</a></li> 
+     <li><a href="Configuration-and-Deployment.html">Configuration and Deployment</a></li> 
+     <li><a href="Database-Fields.html">Database Fields</a></li> 
+     <li><a href="Patient-and-Treatment-Templates.html">Patient and Treatment Templates</a></li> 
+     <li><a href="Analysis.html">Analysis</a></li> 
+     <li><a href="Customizing-PDF-Treatment-Reports.html">Customizing PDF Treatment Reports</a></li> 
+     <li><a href="HL7-Functionality.html">HL7 Functionality</a></li> 
+     <li><a href="Markers.html">Markers</a></li> 
+     <li><a href="Finalizing-Treatments.html">Finalizing Treatments</a></li> 
+     <li><a href="Patient-Summary-Reports.html">Patient Summary Reports</a></li> 
+     <li><a href="Preferences.html">Preferences</a></li> 
+     <li><a href="Keyboard-Shortcuts.html">Keyboard Shortcuts</a></li> 
+     <li><a href="Additional-Thanks.html">Additional Thanks</a></li> 
+    </ul> 
+   </div> 
+   <div id="pfwiki-body-anchor" class="pfwiki-body-wrapper"> 
+    <article class="markdown-body"> 
+     <header> 
+      <div class="small-screen-jump-links"> <a href="#pfwiki-sidebar-anchor">Jump to Sidebar</a> 
+      </div> 
+      <h1 class="title">Database Fields</h1> 
+     </header> <!-- Database-Fields --> 
+     <h3 id="on-this-page">On this Page</h3> 
+     <ul> 
+      <li><a href="#overview-of-fields">Overview of Fields</a></li> 
+      <li><a href="#field-parsing">Field Parsing</a></li> 
+     </ul> 
+     <h2 id="overview-of-fields">Overview of Fields</h2> 
+     <p>All electronic record systems use the concept of <em>fields</em> to organize information. For instance, in a typical patient database, each person has a <code>Name</code>, <code>ID #</code>, <code>Date of Birth</code>, etc. Most systems have a fixed set of standard fields along with a few blank spaces that can be used as custom fields.</p> 
+     <p>GPD takes a flexible approach where users can define whatever fields they need for patient and treatment records just by typing information using a certain convention. For instance, to add a standard ID field to a patient's information, you just write <code>PATIENT ID: 123456</code>; or to add something more obscure, you could use <code>Favorite Color: Maroon</code>. If multiple patients (or treatments) use the same field names, then you can analyze and export data using those fields as though they were built-in.</p> 
+     <h2 id="field-parsing">Field Parsing</h2> 
+     <p>What constitutes a treatment or patient field are not predetermined, but rather collected from the textual content in the patient/treatment info text areas based on a convention: any line that starts with a letter and doesn't have two consecutive whitespace characters before the first colon, is considered a field, holding data from that line and all subsequent <em>field-value</em> lines.</p> 
+     <p>A <em>field-value</em> line begins with one or more whitespace characters, and contains at least one non-whitespace character. Thus, a field's value ends when either a blank line or a new field is encountered.</p> 
+     <p>An few examples of valid fields:</p> 
+     <pre><code>Age: 43
+
+Frequency: 60 Hz
+Frequency:
+  60 Hz
+
+Anesthesia: Lorazepam
+            Thiopental
+            Lidocaine
+
+Reason For Study: 
+  &gt; Referral by PCP
+  &gt; Emotional Indicators</code></pre> 
+     <p>In this example, both <code>ANESTHESIA</code> and <code>REASON FOR STUDY</code> will have values composed of multiple lines.</p> 
+     <p>And a few examples that are <em>not</em> fields:</p> 
+     <pre><code>Age of Patient - 43       (no colon)
+IIE  Frequency: 67 Hz     (two spaces between IIE and Frequency)
+  Patient ID:  45         (line starts with a space)
+# of Visits: 4            (line does not begin with a letter)</code></pre> 
+     <p>Field names are case insensitive, so <code>FREQUENCY</code> and <code>FreQueNCy</code> are considered the same name.</p> 
+     <p>In addition to all the fields derived from collected treatment data (i.e. <code>% Energy Set</code>, <code>Base Heart Rate</code>, etc.) you can define any custom fields you would like using the above convention, and these will be available for analysis in the Chart and Graph, in HL7 templates, and so forth. A common usage is to define custom fields in Patient Info – <code>Patient ID</code>, etc. – that required for interoperability with an installation's health records system.</p> 
+    </article> 
+    <div class="pfwiki-footer"> 
+     <p>© 2020 Elektrika, Inc.</p> 
+    </div> 
+   </div> 
+  </div>  
+ </body>
+</html>
