@@ -401,6 +401,7 @@ div.line-block {
   background-color: #fafafa;
   border-radius: 6px;
   max-width: 200px;
+  min-width: 160px;
   order: 2;
 }
 
@@ -460,7 +461,7 @@ div.line-block {
 
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 850px) {
 
   .pfwiki-wrapper {
     flex-flow: column nowrap;
