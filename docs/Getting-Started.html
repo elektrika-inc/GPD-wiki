@@ -52,7 +52,7 @@
      <h3 id="on-this-page">On this Page</h3> 
      <ul> 
       <li><a href="#starting-up">Starting Up</a></li> 
-      <li><a href="#create-user-account">Create User Account</a></li> 
+      <li><a href="#initial-user-account">Initial User Account</a></li> 
       <li><a href="#patient-list">Patient List</a></li> 
       <li><a href="#treatment-list">Treatment List</a></li> 
       <li><a href="#monitoring-window">Monitoring Window</a></li> 
@@ -60,10 +60,12 @@
       <li><a href="#exiting-gpd">Exiting GPD</a></li> 
      </ul> 
      <h2 id="starting-up">Starting Up</h2> 
+     <p>You'll need to generate license information the first time you run the program. Enter the name of the user or institution in the <code>License Name</code> field, and then click <code>Generate Key</code>. The <code>License Key</code> field will be filled in, and then click <code>Validate License</code> to proceed to the Login window.</p> 
      <p>After you enter your license information, you'll be presented with the Login window:</p> 
      <p><img src="images/login.png" alt="Login Window"></p> 
-     <h2 id="create-user-account">Create User Account</h2> 
-     <p>The first thing to do is create a user account:</p> 
+     <h2 id="initial-user-account">Initial User Account</h2> 
+     <p>By default GPD will create a user with the same username as your Windows login, with a blank password (<em>not</em> your Windows password). You can either use this account as-is, or proceed below to create a custom GPD account or change your password.</p> 
+     <p>To create a user account:</p> 
      <ol type="1"> 
       <li><p>Click <em>Create/Manage Users</em> (no password is needed by default). The Manage Users window will appear:</p> <p><img src="images/manage-users.png" alt="Manage Users Dialog"></p></li> 
       <li><p>Click <em>New User</em> and choose your username.</p></li> 
@@ -83,6 +85,9 @@
      <h2 id="monitoring-window">Monitoring Window</h2> 
      <p><img src="images/monitoring-window.png" alt="Monitoring Window"></p> 
      <p>In its default configuration, GPD will begin monitoring as soon as the window is open. Once your collect baseline on the Thymatron, it will begin transmitting real-time data via its RS232 serial connection.</p> 
+     <blockquote> 
+      <p>If you have more than one serial port on your computer, you may need to select the appropriate port using the <em>Collection</em> menu → <em>COM Port</em> combo.</p> 
+     </blockquote> 
      <p>You can show or hide channels, and change each channel's vertical scale, using the controls on the left of the window. The horizontal scale is controlled by the combobox on the bottom left. The time (in seconds) is displayed at the bottom of the graph, and the segment numbers (each segment being 1.28s) on the top.</p> 
      <p>For most efficient data upload from the Thymatron, turn on autoupload of all data (FlexDial→<code>UPLOAD</code>→<code>LOAD RAW</code>), so that when the user presses Start/Stop post-treatment, the Thymatron will automatically send complete treatment data to GPD.</p> 
      <p>Once GPD receives treatment data from the Thymatron, the Monitoring screen will close and you will see the new treatment at the top of the Treatment List. Selecting the new treatment will show the treatment report, with the same information as the report printed by the machine, in the right text pane.</p> 

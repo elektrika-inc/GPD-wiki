@@ -62,6 +62,7 @@
         <li><a href="#commentary-on-gpds-sql-code">Commentary on GPD's SQL Code</a></li> 
        </ul></li> 
       <li><a href="#customizing-the-ui">Customizing the UI</a></li> 
+      <li><a href="#other-configuration">Other Configuration</a></li> 
      </ul> 
      <h2 id="single-user-usage">Single-User Usage</h2> 
      <p>The user can simply unzip the GPD distribution ZIP and run <code>GPD.exe</code>. In the program's default configuration, GPD stores data and preferences in the user's Application Data (aka <code>AppData</code>) folder.</p> 
@@ -75,15 +76,23 @@
       <li><p>Unzip the GPD distribution into a shared drive. The administrator should have write permission to this location when he runs GPD for the first time; if necessary, right-click <code>GPD.exe</code> and "Run as administrator" in step 2 below.</p></li> 
       <li><p>Run <code>GPD.exe</code>, enter the appropriate license information, and configure the program by adjusting preferences and templates.</p></li> 
       <li><p>From the Preferences windows, select the <code>File</code> Menu→<code>Export Preferences</code> command, and save the resulting ZIP file as <code>initial-prefs.zip</code> in the <code>config</code> subfolder of the GPD program directory (in the same folder as <code>gpd.config</code>). By doing that, when a user runs GPD for the first time, his personal preferences and templates will take the value of those just exported.</p></li> 
-      <li><p>If necessary, edit <code>gpd.config</code> to adjust users' configuration and data directories. By default, both configuration and treatment data are stored in various folders under <code>${appdata}/GPD</code> (where <code>${appdata}</code> represents the value of the user's <code>APPDATA</code> environment variable). If the administrator would prefer that each user store data somewhere else, he can edit the appropriate lines in <code>gpd.config</code>.</p> <p>Any environment variable can be used in the paths by enclosing it in curly brackets <code>${}</code>. For instance, you can store each user’s preferences in a separate directory on a shared drive by using a path like:</p> <p>  <code>user-prefs = W:/GPD_Data/${USERNAME}/user/user.prefs</code></p> <p>and GPD will expand <code>${USERNAME}</code> into the value of the<code> %USERNAME%</code> Windows environment variable.</p></li> 
+      <li><p>If necessary, edit <code>gpd.config</code> to adjust users' configuration and data directories. By default, both configuration and treatment data are stored in various folders under <code>${appdata}/GPD</code> (where <code>${appdata}</code> represents the value of the user's <code>APPDATA</code> environment variable). If the administrator would prefer that each user store data somewhere else, he can edit the appropriate lines in <code>gpd.config</code>.</p> <p>Any environment variable can be used in the paths by enclosing it in curly brackets <code>${}</code>. For instance, you can store each user’s preferences in a separate directory on a shared drive by using a path like:</p> <p>  <code>user-prefs = W:/GPD_Data/${USERNAME}/user/user.prefs</code></p> <p>and GPD will expand <code>${USERNAME}</code> into the value of the<code> %USERNAME%</code> Windows environment variable.</p> <p>You will generally want to uncomment the line</p> <pre><code>auto-create-username = ${USERNAME}</code></pre> <p>so that when a user runs GPD for the first time, a GPD account with the same username as the current Windows account will be automatically created.</p></li> 
       <li><p>Edit <code>database.config</code> and <code>gui-config.xml</code> to make any changes desired for your environment (more info on these files given in the following sections).</p></li> 
       <li><p>If you have configured GPD such that all users share a single database, you can allow users to quickly filter the patient list to see other users' patients by setting <code>allow-quick-user-patient-switching = true</code> in <code>gpd.config</code>.</p></li> 
       <li><p>Make the GPD program folder available to users, read-only if desired.</p></li> 
      </ol> 
      <p>If you've upgraded through a number of GPD versions, your <code>gpd.config</code> file may not have all the latest properties or comments; however, in the <code>reference</code> subdirectory of your <code>config</code> directory, you'll find the latest revisions of all the default configuration files.</p> 
      <h2 id="updating">Updating</h2> 
-     <p>The ZIP distribution may be unpacked directly over an existing installation directory – no configuration information will be lost.</p> 
+     <p>The ZIP distribution may be unpacked directly over an existing installation directory – no configuration information will be lost, <em>unless</em> you have modified some of the default files in the <code>dbconf</code> folder — in this case, you should backup <code>dbconf</code> and restore it after unpacking the ZIP.</p> 
      <p>Alternatively, you can update GPD in-place by viewing the About dialog (<code>Help</code> Menu→<code>About</code>…) and clicking <code>Check for Update</code>. If an update is found, you can choose to download and install it automatically.</p> 
+     <blockquote> 
+      <p>The automatic update makes network connections to retrieve update files. If you're in a firewalled environment, you'll need to whitelist certain domains:</p> 
+      <pre><code>*.box.com
+*.box.net
+*.boxcdn.net
+*.boxcloud.com
+*.boxrelay.com</code></pre> 
+     </blockquote> 
      <p>If you don’t have write access to the GPD directory, you can request that the updater run with Administrator privileges by checking the “Run updater with elevated privileges (UAC)” in the Preferences→General tab.</p> 
      <h2 id="sql-database-configuration">SQL Database Configuration</h2> 
      <p><code>database.config</code>, and the various files referenced from it, allow you to integrate GPD into your own SQL database system, if desired. In its default configuration, GPD will store textual and numeric information in its own local database, and binary data – files associated with patients or treatments, or data collected from devices – in the filesystem (as configured by the <code>files-dir</code> property in <code>gpd.config</code>). By setting</p> 
@@ -129,34 +138,41 @@
      <p>The default configuration XML is given below, along with the two resulting button bars for the treatment list and patient list, respectively. The <code>&lt;label&gt;</code> element is optional, and each <code>&lt;button-bar&gt;</code> can have as many <code>&lt;button&gt;</code> elements as you would like, though the screen size of the window imposes a practical limit. The <code>text</code> attribute of each <code>&lt;button&gt;</code> specifies what text appears on the button, and the <code>action</code> attribute corresponds to the menu item whose action you want the button to perform. The <code>action</code> can be upper- or lowercase, and you can leave out the ellipses "..." for menu items (like <code>Patient Files...</code> in the Patient menu) that have them.</p> 
      <p>Making a custom button bar is useful for putting commonly used commands directly in front of the user, and can also provide for using your own clearer terminology for certain actions – for instance, you could create a button named "Transmit to Server" that would invoke the "<code>SEND&nbsp;TREATMENT&nbsp;VIA MLLP</code>" action.</p> 
      <p>Default <code>gui-config.xml</code>:</p> 
-     <div class="sourceCode" id="cb3">
-      <pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">&lt;GPD&gt;</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>  <span class="kw">&lt;treatment-list&gt;</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>    <span class="kw">&lt;button-bar&gt;</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>      <span class="kw">&lt;label</span><span class="ot"> text=</span><span class="st">"TREATMENT:"</span> <span class="kw">/&gt;</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a>      <span class="kw">&lt;button</span><span class="ot"> text=</span><span class="st">"COLLECT NEW"</span><span class="ot"> action=</span><span class="st">"COLLECT NEW TREATMENT"</span> <span class="kw">/&gt;</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a>      <span class="kw">&lt;button</span><span class="ot"> text=</span><span class="st">"View Graph"</span><span class="ot"> action=</span><span class="st">"VIEW GRAPH"</span> <span class="kw">/&gt;</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a>      <span class="kw">&lt;button</span><span class="ot"> text=</span><span class="st">"Delete"</span><span class="ot"> action=</span><span class="st">"DELETE TREATMENT"</span> <span class="kw">/&gt;</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true"></a>      <span class="kw">&lt;button</span><span class="ot"> text=</span><span class="st">"Change Date"</span><span class="ot"> action=</span><span class="st">"CHANGE DATE"</span> <span class="kw">/&gt;</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true"></a>      <span class="kw">&lt;button</span><span class="ot"> text=</span><span class="st">"Files"</span><span class="ot"> action=</span><span class="st">"ASSOCIATED FILES"</span> <span class="kw">/&gt;</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true"></a>      <span class="kw">&lt;button</span><span class="ot"> text=</span><span class="st">"Compare"</span><span class="ot"> action=</span><span class="st">"COMPARE TREATMENTS"</span> <span class="kw">/&gt;</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true"></a>    <span class="kw">&lt;/button-bar&gt;</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true"></a>  <span class="kw">&lt;/treatment-list&gt;</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true"></a>  <span class="kw">&lt;patient-list&gt;</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true"></a>    <span class="kw">&lt;button-bar&gt;</span></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true"></a>      <span class="kw">&lt;label</span><span class="ot"> text=</span><span class="st">"PATIENT:"</span> <span class="kw">/&gt;</span></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true"></a>      <span class="kw">&lt;button</span><span class="ot"> text=</span><span class="st">"New"</span><span class="ot"> action=</span><span class="st">"NEW PATIENT"</span> <span class="kw">/&gt;</span></span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true"></a>      <span class="kw">&lt;button</span><span class="ot"> text=</span><span class="st">"Delete"</span><span class="ot"> action=</span><span class="st">"DELETE PATIENT"</span> <span class="kw">/&gt;</span></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true"></a>      <span class="kw">&lt;button</span><span class="ot"> text=</span><span class="st">"View Treatments"</span><span class="ot"> action=</span><span class="st">"VIEW TREATMENTS"</span> <span class="kw">/&gt;</span></span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true"></a>      <span class="kw">&lt;button</span><span class="ot"> text=</span><span class="st">"Collect New Treatment"</span><span class="ot"> action=</span><span class="st">"COLLECT NEW TREATMENT"</span> <span class="kw">/&gt;</span></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true"></a>      <span class="kw">&lt;button</span><span class="ot"> text=</span><span class="st">"Files"</span><span class="ot"> action=</span><span class="st">"PATIENT FILES"</span> <span class="kw">/&gt;</span></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true"></a>    <span class="kw">&lt;/button-bar&gt;</span></span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true"></a>  <span class="kw">&lt;/patient-list&gt;</span></span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true"></a><span class="kw">&lt;/GPD&gt;</span></span></code></pre>
+     <div class="sourceCode" id="cb5">
+      <pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;GPD&gt;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;treatment-list&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;button-bar&gt;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>      <span class="kw">&lt;label</span><span class="ot"> text=</span><span class="st">"TREATMENT:"</span> <span class="kw">/&gt;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>      <span class="kw">&lt;button</span><span class="ot"> text=</span><span class="st">"COLLECT NEW"</span><span class="ot"> action=</span><span class="st">"COLLECT NEW TREATMENT"</span> <span class="kw">/&gt;</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>      <span class="kw">&lt;button</span><span class="ot"> text=</span><span class="st">"View Graph"</span><span class="ot"> action=</span><span class="st">"VIEW GRAPH"</span> <span class="kw">/&gt;</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>      <span class="kw">&lt;button</span><span class="ot"> text=</span><span class="st">"Delete"</span><span class="ot"> action=</span><span class="st">"DELETE TREATMENT"</span> <span class="kw">/&gt;</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>      <span class="kw">&lt;button</span><span class="ot"> text=</span><span class="st">"Change Date"</span><span class="ot"> action=</span><span class="st">"CHANGE DATE"</span> <span class="kw">/&gt;</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>      <span class="kw">&lt;button</span><span class="ot"> text=</span><span class="st">"Files"</span><span class="ot"> action=</span><span class="st">"ASSOCIATED FILES"</span> <span class="kw">/&gt;</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>      <span class="kw">&lt;button</span><span class="ot"> text=</span><span class="st">"Compare"</span><span class="ot"> action=</span><span class="st">"COMPARE TREATMENTS"</span> <span class="kw">/&gt;</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;/button-bar&gt;</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;/treatment-list&gt;</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;patient-list&gt;</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;button-bar&gt;</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>      <span class="kw">&lt;label</span><span class="ot"> text=</span><span class="st">"PATIENT:"</span> <span class="kw">/&gt;</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>      <span class="kw">&lt;button</span><span class="ot"> text=</span><span class="st">"New"</span><span class="ot"> action=</span><span class="st">"NEW PATIENT"</span> <span class="kw">/&gt;</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>      <span class="kw">&lt;button</span><span class="ot"> text=</span><span class="st">"Delete"</span><span class="ot"> action=</span><span class="st">"DELETE PATIENT"</span> <span class="kw">/&gt;</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>      <span class="kw">&lt;button</span><span class="ot"> text=</span><span class="st">"View Treatments"</span><span class="ot"> action=</span><span class="st">"VIEW TREATMENTS"</span> <span class="kw">/&gt;</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>      <span class="kw">&lt;button</span><span class="ot"> text=</span><span class="st">"Collect New Treatment"</span><span class="ot"> action=</span><span class="st">"COLLECT NEW TREATMENT"</span> <span class="kw">/&gt;</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>      <span class="kw">&lt;button</span><span class="ot"> text=</span><span class="st">"Files"</span><span class="ot"> action=</span><span class="st">"PATIENT FILES"</span> <span class="kw">/&gt;</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;/button-bar&gt;</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;/patient-list&gt;</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/GPD&gt;</span></span></code></pre>
      </div> 
      <p>Resulting button bars:</p> 
      <p> <img src="images/treatment-button-bar.png" alt="Treatment List Button Bar"></p> 
      <p> <img src="images/patient-button-bar.png" alt="Patient List Button Bar"></p> 
+     <h3 id="other-configuration">Other Configuration</h3> 
+     <h4 id="clear-patient-database-on-shutdown"><code>clear-patient-database-on-shutdown</code></h4> 
+     <p>If true, GPD will delete <em>all</em> patient data and treatments when the progarm is shut down. This may be useful for some institutions with specific patient data retention policies.</p> 
+     <p>Default: <code>clear-patient-database-on-shutdown = false</code></p> 
+     <h4 id="restrict-preference-access"><code>restrict-preference-access</code></h4> 
+     <p>If true, access to the Preferences dialog from the Login window will require entering the admin password. Also, the menu items to access Preferences from the Treatment and Patient Lists are removed. Note that for this setting to be effective, you'll need to set an admin password in the Manage Users dialog (Login Window → Create/Manage Users → (type password) → Set Admin Password).</p> 
+     <p>Default: <code>restrict-preference-access = false</code></p> 
     </article> 
     <div class="pfwiki-footer"> 
      <p>© 2020 Elektrika, Inc.</p> 

@@ -59,7 +59,7 @@
      <p>This is a somewhat advanced feature that allows a user to generate a report that contains data from all the user's patient and treatment information. The basic idea is that GPD builds up a hierarchical data model that contains a sequence of all the user's patients, and for each patient, a sequence of that patient's treatments. This model is fed to a template that can output a report in any textual format (principally plain-text, XML, or HTML).</p> 
      <h2 id="data-model">Data Model</h2> 
      <p>The model is based on <em>hashes</em>, that map a key to a value. The hierarchy of hashes is presented in this diagram:</p> 
-     <p><img src="images/patient-report-data-model.png" alt="Patient Report Data Model"></p> 
+     <p><img src="images/patient-report-data-model.svg" alt="Patient Report Data Model"></p> 
      <p>When you invoke the command to generate a patient summary report (in the Patient List, <code>File </code>menu→<code>Generate Patient Summary Report…</code>), you will be presented with a dialog to choose the date range for the report:</p> 
      <p><img src="images/select-date-range.png" alt="Select Date Range Dialog"></p> 
      <p>Only those treatments that occurred within the chosen date range will be considered when building the data model, and it is the start date and end date entered here that appear in the <code>startDate</code> and <code>endDate</code> keys of the root hash. The <code>totalTreatments</code> key contains the total number of treatments for all patients in the date range, and in the <code>treatments</code> key is a sequence of patient hashes.</p> 

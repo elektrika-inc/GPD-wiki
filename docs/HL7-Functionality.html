@@ -86,12 +86,12 @@
        <ul> 
         <li><p><strong>Network Timeout</strong></p> <p>When GPD is waiting to receive or send data over the network, it will wait the specified number of seconds before aborting.</p></li> 
         <li><p><strong>Half-Close socket when sending query</strong></p> <p>When issuing a query, GPD will re-use the same socket connection to receive the server's reply. A TCP/IP socket can be put into a half-closed state, which may be required by some servers to recognize that the query message has finished sending. Generally you should not enable this option.</p></li> 
-        <li><p><strong>Close socket after MLLP reply</strong></p> <p>If this box is checked, when reading a query response from the server, GPD will stop reading from and close the socket after it encounters the first MLLP end marker <code>&amp;lt;0x1C&gt;</code>. If unchecked, GPD will continue to receive data until the server closes the socket. This option generally should be enabled.</p></li> 
+        <li><p><strong>Close socket after MLLP reply</strong></p> <p>If this box is checked, when reading a query response from the server, GPD will stop reading from and close the socket after it encounters the first MLLP end marker <code>&lt;0x1C&gt;</code>. If unchecked, GPD will continue to receive data until the server closes the socket. This option generally should be enabled.</p></li> 
        </ul></li> 
       <li><p><strong>Drop Folder</strong></p> <p>Filesystem folder to save HL7 messages. <code>Choose…</code> to select a folder.</p></li> 
       <li><p><strong>Use HL7 query to retrieve new patient info</strong></p> <p>Check to enable retrieval of patient info via an HL7 query. If checked, when you add a new patient, you will be able to choose between using an HL7 query and entering the name and ID manually.</p></li> 
       <li><p><strong>Generate HL7 message after treatment</strong></p> <p>Automatically generate an HL7 message after treatment data is collected.</p></li> 
-      <li><p><strong>Save message to drop folder</strong></p> <p>Save the generated HL7 message to the chosen drop folder.</p></li> 
+      <li><p><strong>Save message to drop folder</strong></p> <p>Save the generated HL7 message to the chosen drop folder. The filename will be the same as that of automatically generated treatment reports, except that they will end in <code>-HL7.txt</code> rather than <code>.pdf</code>. See the documentation for <em>Save Treatment Report PDF after collection</em> in <a href="Customizing-PDF-Treatment-Reports.html">Customizing PDF Treatment Reports</a> for details.</p></li> 
       <li><p><strong>Send message via MLLP</strong></p> <p>Send the generated message to the specified server via MLLP.</p></li> 
       <li><p><strong>Edit Query/Patient/Treatment Message Templates</strong></p> <p>Edit the respective template in a text-editor window.</p></li> 
      </ul> 
