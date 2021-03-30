@@ -8,4 +8,4 @@ Please see [the wiki](https://github.com/elektrika-inc/GPD-wiki/wiki) for GPD do
 
 ----
 
-© 2020 Elektrika, Inc.
+© 2021 Elektrika, Inc.
